@@ -18,6 +18,6 @@ for x in my_flags.get("CPPDEFINES"):
 # strip quotes needed for shell escaping
 s = lambda x: x.replace('"', "")
 env.Replace(
-    PROGNAME="%s-%s-%s-%s-%s-%s" %
+    PROGNAME="%s-%s-%s-%s-%s" %
     (s(defines.get("PIO_SRC_NAM")), s(defines.get("VERSION")), str(env["BOARD"]),
      s(defines.get("PIO_SRC_REV")), s(defines.get("PIO_SRC_BRH"))))
