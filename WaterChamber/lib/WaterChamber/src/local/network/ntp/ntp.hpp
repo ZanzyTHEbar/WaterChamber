@@ -6,7 +6,7 @@
 #ifndef NETWORKNTP_hpp
 #define NETWORKNTP_hpp
 #include <memory>
-#include <defines.hpp>
+#include <Arduino.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
