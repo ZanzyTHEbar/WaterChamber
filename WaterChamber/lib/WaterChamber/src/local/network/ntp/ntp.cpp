@@ -32,7 +32,7 @@ NetworkNTP::NetworkNTP() : _formattedDate(""),
 
 NetworkNTP::~NetworkNTP() {}
 
-#if NTP_MANUAL_ENABLED
+#ifdef NTP_MANUAL_ENABLED
 void NetworkNTP::NTPSetupManual()
 {
     log_i("Starting UDP");

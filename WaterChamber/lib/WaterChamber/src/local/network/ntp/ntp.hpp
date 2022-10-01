@@ -42,10 +42,7 @@ private:
     // NTP Servers:
     static const char ntpServerName[16];
     unsigned int localPort; // local port to listen for UDP packets
-    const int timeZone; 
-
-    
-
+    const int timeZone;
 
     time_t prevDisplay; // when the digital clock was displayed
     std::unique_ptr<WiFiUDP> ntpUDP;
