@@ -67,7 +67,7 @@ Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::begin()
                                { Serial.println(F("Humidity Sensor Setup DHT and SHT31 - initialised two sensors")); });
   humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_DHT_SHT31_2, [&](void) -> void
                                { Serial.println(F("Humidity Sensor Setup DHT and SHT31 - initialised three sensors")); });
-                               
+
 #if USE_DHT_SENSOR
   // Initialize the DHT sensor.
   dht->begin();
@@ -126,7 +126,7 @@ Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::begin()
     log_d("SHT31 Sensors Setup Complete");
     _humiditySensorsActive = HUMIDITY_SENSORS_ACTIVE_BOTH;
   }
-  my_delay(2L); // delay in between reads for stability
+  delay(2L); // delay in between reads for stability
 #endif          // USE_SHT31_SENSOR
   return _humiditySensorsActive;
 }
@@ -135,7 +135,7 @@ Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::begin()
 Humidity::Hum Humidity::readDHT()
 {
   // Delay between measurements.
-  my_delay(_delayS);
+  delay(_delayS);
   // Get temperature event and print its value.
   sensors_event_t event;
   dht->temperature().getEvent(&event);

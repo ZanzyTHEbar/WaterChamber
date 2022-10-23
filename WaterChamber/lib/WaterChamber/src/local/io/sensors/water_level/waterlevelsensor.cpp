@@ -7,6 +7,7 @@
 //! * Manual calibration is needed!!!
 //************************************************************************************************************************
 
+#if USE_CAP
 WaterLevelSensor::WaterLevelSensor(CalibrationButton *_calibrationButton, TowerTemp *_towerTemp) : _towerTemp(_towerTemp),
                                                                                                    _calibrationButton(_calibrationButton),
                                                                                                    _activateCalibration(false),
@@ -16,7 +17,16 @@ WaterLevelSensor::WaterLevelSensor(CalibrationButton *_calibrationButton, TowerT
                                                                                                    _depthArray{0},
                                                                                                    _qNumberDepth{0},
                                                                                                    _distanceSensor{std::make_shared<UltraSonicDistanceSensor>(ECHO_PIN, TRIG_PIN)} {}
-
+#else  // USE_CAP
+WaterLevelSensor::WaterLevelSensor(TowerTemp *_towerTemp) : _towerTemp(_towerTemp),
+                                                            _activateCalibration(false),
+                                                            _depth(0),
+                                                            _depthRange(0),
+                                                            _qNumberReadings{0},
+                                                            _depthArray{0},
+                                                            _qNumberDepth{0},
+                                                            _distanceSensor{std::make_shared<UltraSonicDistanceSensor>(ECHO_PIN, TRIG_PIN)} {}
+#endif // USE_CAP
 WaterLevelSensor::~WaterLevelSensor() {}
 
 void WaterLevelSensor::begin()
@@ -34,6 +44,7 @@ void WaterLevelSensor::begin()
 #endif                                                                   // USE_CAP
 }
 
+#if USE_CAP
 // This is the function that is called on a quick click.
 void WaterLevelSensor::quickCallback(void)
 {
@@ -44,7 +55,6 @@ void WaterLevelSensor::quickCallback(void)
             // the button is not being pressed..
             return;
         }
-
         // the button is being pressed..
         calibrateSensor();
     }
@@ -54,7 +64,7 @@ void WaterLevelSensor::quickCallback(void)
 void WaterLevelSensor::holdCallback(void)
 {
     // Long press has happened.
-    my_delay(1L);
+    delay(1000);
     _activateCalibration = !_activateCalibration;
 }
 
@@ -69,7 +79,6 @@ void WaterLevelSensor::longholdCallback(void)
             // the button is not being pressed..
             return;
         }
-
         // the button is being pressed..
         setCapSensorRange();
     }
@@ -82,7 +91,6 @@ int WaterLevelSensor::readWaterLevelCapacitive()
         log_e("The capacitive sensor is not calibrated, please calibrate by pressing the calibrate button. Exiting...");
         return 0;
     }
-
     int touchValue = touchRead(CAP_WATER_LEVEL_SENSOR_PIN);
     log_d("Water Level Sensor Raw Readings: %d", touchValue);
     return touchValue;
@@ -126,7 +134,7 @@ void WaterLevelSensor::calibrateSensor()
     for (byte i = 0; i < numtoaverage; i++)
     {
         _readings[i] += getWaterLevel();
-        my_delay(0.1L);
+        delay(100);
     }
 
     for (byte i = 0; i < sizeof(_readings) / _readings[0]; i++)
@@ -160,7 +168,7 @@ void WaterLevelSensor::setCapSensorRange()
     for (byte i = 0; i < numtoaverage; i++)
     {
         _readings += touchValue;
-        my_delay(0.1L);
+        delay(100);
     }
 
     for (byte i = 0; i < numtoaverage; i++)
@@ -206,9 +214,11 @@ double WaterLevelSensor::readSensor()
     double distance = _distanceSensor->measureDistanceCm(_towerTemp->temp_sensor_results.temp[0]);
     log_d("Distance: %.3f cm", distance, DEC);
     // Every 1 second, do a measurement using the sensor and print the distance in centimeters.
-    my_delay(1L);
+    delay(1000);
     return distance;
 }
+
+#endif
 
 int WaterLevelSensor::readWaterLevelUltraSonic()
 {
@@ -234,9 +244,6 @@ int WaterLevelSensor::readWaterLevelUltraSonic()
         log_e("Error: %s", "Sensor Value is NaN");
         return 0.0;
     }
-
-    // pause between readings, in seconds:
-    my_delay(30L);
     return (int)p;
 }
 
@@ -244,7 +251,7 @@ int WaterLevelSensor::getWaterLevel()
 {
 #if USE_CAP
     return getPercentage();
-#elif USE_UC
+#else
     return readWaterLevelUltraSonic();
 #endif // USE_CAP
 }

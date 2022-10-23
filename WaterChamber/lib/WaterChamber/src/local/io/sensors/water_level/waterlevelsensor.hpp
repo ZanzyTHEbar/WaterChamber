@@ -5,7 +5,6 @@
 #pragma once
 #ifndef WATERLEVELSENSOR_HPP
 #define WATERLEVELSENSOR_HPP
-#include <defines.hpp>
 #include <memory>
 #include <functional>
 #include <HCSR04.h>
@@ -13,13 +12,19 @@
 #include "calibrationbutton.hpp"
 #endif // USE_CAP
 
-#include "sensors/temperature/towertemp.hpp"
+#include "local/io/sensors/temperature/towertemp.hpp"
 
 class WaterLevelSensor
 {
 public:
     // Constructor
-    WaterLevelSensor(CalibrationButton *_calibrationButton, TowerTemp *_towerTemp);
+#if USE_CAP
+    WaterLevelSensor(CalibrationButton *_calibrationButton, 
+                     TowerTemp *_towerTemp);
+#else
+    WaterLevelSensor(TowerTemp *_towerTemp);
+#endif // USE_CAP
+
     virtual ~WaterLevelSensor();
     void begin();
     double readSensor();
@@ -58,7 +63,9 @@ private:
     void longholdCallback(void);
 
     std::shared_ptr<UltraSonicDistanceSensor> _distanceSensor; // Initialize sensor that uses digital pins 13 and 12.
+#if USE_CAP
     CalibrationButton *_calibrationButton;
+#endif // USE_CAP
     TowerTemp *_towerTemp;
 };
 #endif

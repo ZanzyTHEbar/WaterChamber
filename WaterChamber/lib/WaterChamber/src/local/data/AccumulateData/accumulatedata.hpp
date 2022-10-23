@@ -1,37 +1,24 @@
 #ifndef ACCUMULATEDATA_HPP
 #define ACCUMULATEDATA_HPP
-#include <defines.hpp>
 #include <ArduinoJson.h>
 #include <lists.h>
 #include <vector>
 
 // data Struct
-#include "data/Config/config.hpp"
+#include "local/data/Config/config.hpp"
 #include "data/StateManager/StateManager.hpp"
 
-// Light Sensors
-#if USE_BH1750
-#include "sensors/light/bh1750.hpp"
-#else
-#include "sensors/light/ldr.hpp"
-#endif // USE_BH1750
+// Temp local/io/Sensors
+#include "local/io/sensors/temperature/towertemp.hpp"
 
-// Temp Sensors
-#include "sensors/temperature/towertemp.hpp"
+// Humidity local/io/Sensors
+#include "local/io/sensors/humidity/Humidity.hpp"
 
-// Humidity Sensors
-#include "sensors/humidity/Humidity.hpp"
+// Water Level local/io/Sensors
+#include "local/io/sensors/water_level/waterlevelsensor.hpp"
 
-// Water Level Sensors
-#include "sensors/water_level/waterlevelsensor.hpp"
-
-// PH Sensors
-#if ENABLE_PH_SUPPORT
-#include "sensors/pH/pHsensor.hpp"
-#endif // ENABLE_PH_SUPPORT
-
-#include "io/Relays/relays.hpp"
-#include "io/Pump/pump.hpp"
+#include "local/io/Relays/relays.hpp"
+#include "local/io/Pump/pump.hpp"
 
 class AccumulateData
 {
@@ -50,7 +37,6 @@ private:
     int _numTempSensors;
     TowerTemp *tower_temp;
     Humidity *humidity;
-    LDR *ldr;
     WaterLevelSensor *waterLevelSensor;
     PHSENSOR *phsensor;
     PUMP *pump;

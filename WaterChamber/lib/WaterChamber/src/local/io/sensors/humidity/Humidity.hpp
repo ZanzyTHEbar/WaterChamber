@@ -5,7 +5,7 @@
 
 #ifndef HUMIDITY_HPP
 #define HUMIDITY_HPP
-#include <defines.hpp>
+
 #include <Wire.h>
 #include <memory>
 #include <unordered_map>
