@@ -26,12 +26,12 @@
 #include "local/data/BackgroundTasks/timedtasks.hpp"
 
 // Objects
-ProjectConfig configManager;
+ProjectConfig configManager(std::string(), "waterchamber");
 WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, "_waterchamber", 1);
 
 APIServer server(80, &configManager, NULL, "/api/v1", "/wifimanager", "/userCommands");
 OTA ota(&configManager);
-MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "tcp", "api_port", "80");
+MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "_tcp", "api_port", "80");
 
 NetworkNTP ntp;
 TowerTemp tower_temp;
