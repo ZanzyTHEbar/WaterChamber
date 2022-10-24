@@ -36,7 +36,7 @@ MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "tc
 NetworkNTP ntp;
 TowerTemp tower_temp;
 Humidity humidity;
-WaterLevelSensor waterLevelSensor;
+WaterLevelSensor waterLevelSensor(&tower_temp);
 
 AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSensor);
 TimedTasks timedTasks(&data);
