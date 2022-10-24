@@ -1,7 +1,7 @@
 #ifndef LEDMANAGER_HPP
 #define LEDMANAGER_HPP
 #include <Arduino.h>
-#include <src/local/data/StateManager/StateManager.hpp>
+#include <local/data/StateManager/StateManager.hpp>
 #include <unordered_map>
 
 class LEDManager

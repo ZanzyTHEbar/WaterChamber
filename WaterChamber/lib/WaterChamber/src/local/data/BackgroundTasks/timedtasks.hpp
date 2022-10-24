@@ -1,16 +1,14 @@
 #pragma once
 #ifndef TIMEDTASKS_HPP
 #define TIMEDTASKS_HPP
-#include <defines.hpp>
 #include <timeObj.h>
 #include <idlers.h>
 #include <lists.h>
 
-#include "data/Config/config.hpp"
-#include "data/AccumulateData/accumulatedata.hpp"
-#include "network/ntp.hpp"
-#include "mqtt/Basic/basicmqtt.hpp"
-#include "mqtt/HASSIO/hassmqtt.hpp"
+#include "local/data/Config/config.hpp"
+#include "local/data/AccumulateData/accumulatedata.hpp"
+#include "local/network/ntp/ntp.hpp"
+
 
 class TimedTasks : public timeObj //, public linkList
 {

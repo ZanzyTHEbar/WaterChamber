@@ -2,19 +2,11 @@
 
 AccumulateData::AccumulateData(TowerTemp *tower_temp,
                                Humidity *humidity,
-                               LDR *ldr,
-                               WaterLevelSensor *waterLevelSensor,
-                               PHSENSOR *phsensor,
-                               PUMP *pump,
-                               Relays *relays) : _maxTemp(100),
-                                                 _numTempSensors(0),
-                                                 tower_temp(tower_temp),
-                                                 humidity(humidity),
-                                                 ldr(ldr),
-                                                 waterLevelSensor(waterLevelSensor),
-                                                 phsensor(phsensor),
-                                                 pump(pump),
-                                                 relays(relays) {}
+                               WaterLevelSensor *waterLevelSensor) : _maxTemp(100),
+                                                                     _numTempSensors(0),
+                                                                     tower_temp(tower_temp),
+                                                                     humidity(humidity),
+                                                                     waterLevelSensor(waterLevelSensor) {}
 
 AccumulateData::~AccumulateData() {}
 
@@ -41,13 +33,6 @@ void AccumulateData::InitAccumulateData()
 #endif // USE_DHT_SENSOR
 
     tower_temp->getTempC();
-
-    // Relays
-    for (int i = 0; i < sizeof(cfg.config.relays_pin) / sizeof(cfg.config.relays_pin[0]); i++)
-    {
-        Relay.RelayOnOff(cfg.config.relays_pin[i], cfg.config.relays[i]);
-        log_d("Relay on pin: %d is %s", cfg.config.relays_pin[i], cfg.config.relays[i] ? "on" : "off");
-    }
 }
 
 bool AccumulateData::SendData()
@@ -99,13 +84,6 @@ bool AccumulateData::SendData()
     for (int i = 0; i < _numTempSensors; i++)
     {
         temp_sensor_data.add(tower_temp->temp_sensor_results.temp[i]);
-    }
-
-    // Relays
-    JsonArray Relays = jsonDoc.createNestedArray("Tower_Relays_State");
-    for (int i = 0; i < sizeof(cfg.config.relays) / sizeof(cfg.config.relays[0]); i++)
-    {
-        Relays.add(cfg.config.relays[i]);
     }
 
     if (serializeJson(jsonDoc, json) == 0)

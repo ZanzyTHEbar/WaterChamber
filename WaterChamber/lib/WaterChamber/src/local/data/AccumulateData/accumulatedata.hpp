@@ -17,13 +17,12 @@
 // Water Level local/io/Sensors
 #include "local/io/sensors/water_level/waterlevelsensor.hpp"
 
-#include "local/io/Relays/relays.hpp"
-#include "local/io/Pump/pump.hpp"
-
 class AccumulateData
 {
 public:
-    AccumulateData(TowerTemp *tower_temp, Humidity *humidity, LDR *ldr, WaterLevelSensor *waterLevelSensor, PHSENSOR *phsensor, PUMP *pump, Relays *relays);
+    AccumulateData(TowerTemp *tower_temp,
+                   Humidity *humidity,
+                   WaterLevelSensor *waterLevelSensor);
     virtual ~AccumulateData();
 
     void begin();
@@ -38,8 +37,5 @@ private:
     TowerTemp *tower_temp;
     Humidity *humidity;
     WaterLevelSensor *waterLevelSensor;
-    PHSENSOR *phsensor;
-    PUMP *pump;
-    Relays *relays;
 };
 #endif
