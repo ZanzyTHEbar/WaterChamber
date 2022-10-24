@@ -24,7 +24,7 @@ WaterLevelSensor::Data_t WaterLevelSensor::readWaterLevelUltraSonic()
     if (readSensor() <= 0.0)
     {
         log_i("Failed to read ultrasonic sensor.");
-        return {0.0, 0.0};
+        return {0, 0};
     }
 
     // tank diameter and height, in centimeters
@@ -41,8 +41,7 @@ WaterLevelSensor::Data_t WaterLevelSensor::readWaterLevelUltraSonic()
     if (isnan(p))
     {
         log_e("Error: %s", "Sensor Value is NaN");
-        return {0.0, 0.0};
+        return {0, 0};
     }
-    int _p = (int)p;
-    return {stock, _p};
+    return {(int)stock, (int)p};
 }
