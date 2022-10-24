@@ -1,9 +1,102 @@
 #include <Arduino.h>
 
-void setup() {
-  // put your setup code here, to run once:
+// Config
+#include <data/config/project_config.hpp>
+#include <data/StateManager/StateManager.hpp>
+
+// Network
+#include <mDNS/MDNSManager.hpp>
+#include <ota/OTA.hpp>
+#include <wifihandler/wifiHandler.hpp>
+#include <api/webserverHandler.hpp>
+
+// Data
+#include <local/data/AccumulateData/accumulatedata.hpp>
+
+// Sensors
+// Temp local/io/Sensors
+#include "local/io/sensors/temperature/towertemp.hpp"
+// Humidity local/io/Sensors
+#include "local/io/sensors/humidity/Humidity.hpp"
+// Water Level local/io/Sensors
+#include "local/io/sensors/water_level/waterlevelsensor.hpp"
+// Time stamp
+#include "local/network/ntp/ntp.hpp"
+// Background tasks
+#include "local/data/BackgroundTasks/timedtasks.hpp"
+
+// Objects
+ProjectConfig configManager;
+WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, "_waterchamber", 1);
+
+APIServer server(80, &configManager, NULL, "/api/v1", "/wifimanager", "/userCommands");
+OTA ota(&configManager);
+MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "tcp", "api_port", "80");
+
+NetworkNTP ntp;
+TowerTemp tower_temp;
+Humidity humidity;
+WaterLevelSensor waterLevelSensor;
+
+AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSensor);
+TimedTasks timedTasks(&data);
+
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println("Hello, EasyNetworkManager!");
+
+  Serial.setDebugOutput(true);
+  configManager.initConfig(); // call before load to initialise the structs
+  configManager.load();       // load the config from flash
+
+  network.setupWifi();
+  mDNS.startMDNS();
+
+  // handle the WiFi connection state changes
+  switch (wifiStateManager.getCurrentState())
+  {
+  case WiFiState_e::WiFiState_Disconnected:
+  {
+    break;
+  }
+  case WiFiState_e::WiFiState_Disconnecting:
+  {
+    break;
+  }
+  case WiFiState_e::WiFiState_ADHOC:
+  {
+    // only start the API server if we have wifi connection
+    // server.updateCommandHandlers("blink", blink);                // add a command handler to the API server - you can add as many as you want - you can also add methods.
+    // server.updateCommandHandlers("helloWorld", printHelloWorld); // add a command handler to the API server - you can add as many as you want - you can also add methods.
+    server.begin();
+    log_d("[SETUP]: Starting API Server");
+    break;
+  }
+  case WiFiState_e::WiFiState_Connected:
+  {
+    // only start the API server if we have wifi connection
+    // server.updateCommandHandlers("blink", blink);                // add a command handler to the API server - you can add as many as you want - you can also add methods.
+    // server.updateCommandHandlers("helloWorld", printHelloWorld); // add a command handler to the API server - you can add as many as you want - you can also add methods.
+    server.begin();
+    log_d("[SETUP]: Starting API Server");
+    break;
+  }
+  case WiFiState_e::WiFiState_Connecting:
+  {
+    break;
+  }
+  case WiFiState_e::WiFiState_Error:
+  {
+    break;
+  }
+  }
+  ota.SetupOTA();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+  ota.HandleOTAUpdate();
+  data.loop();
+  timedTasks.accumulateSensorData();
 }

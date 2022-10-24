@@ -1,29 +1,23 @@
 #include "accumulatedata.hpp"
 
-AccumulateData::AccumulateData(TowerTemp *tower_temp,
+AccumulateData::AccumulateData(ProjectConfig *configManager,
+                               NetworkNTP *ntp,
+                               TowerTemp *tower_temp,
                                Humidity *humidity,
                                WaterLevelSensor *waterLevelSensor) : _maxTemp(100),
                                                                      _numTempSensors(0),
+                                                                     configManager(configManager),
+                                                                     ntp(ntp),
                                                                      tower_temp(tower_temp),
                                                                      humidity(humidity),
                                                                      waterLevelSensor(waterLevelSensor) {}
 
 AccumulateData::~AccumulateData() {}
 
-void AccumulateData::begin() {}
-
-//******************************************************************************
-// * Function: Accumulate Data to send from sensors and store in json
-// * Description: This function accumulates all sensor data and stores it in the main data structure.
-// * Parameters: None
-// * Return: None
-//******************************************************************************/
-void AccumulateData::InitAccumulateData()
+void AccumulateData::loop()
 {
-    _numTempSensors = tower_temp->getSensorCount();
-    cfg.config.numTempSensors = _numTempSensors;
-
-    // Initialize the library
+    ntp->NTPLoop();
+// Initialize the libraries and collect the data
 #if USE_SHT31_SENSOR
     humidity->ReadSensor();
 #endif // USE_SHT31_SENSOR
@@ -33,19 +27,30 @@ void AccumulateData::InitAccumulateData()
 #endif // USE_DHT_SENSOR
 
     tower_temp->getTempC();
+    waterLevelSensor->readWaterLevelUltraSonic();
 }
 
-bool AccumulateData::SendData()
+//******************************************************************************
+// * Function: Accumulate Data to send from sensors and store in json
+// * Description: This function accumulates all sensor data and stores it in the main data structure.
+// * Parameters: None
+// * Return: bool - true if data was accumulated, false if not
+//******************************************************************************/
+bool AccumulateData::accumulateData()
 {
-    String json = "";
+    _numTempSensors = tower_temp->getSensorCount();
+
+    // assign the data to the data structure
+    std::string json = "";
     StaticJsonDocument<1024> jsonDoc;
-    jsonDoc["id"] = "1";
-    jsonDoc["timestamp"] = time(NULL);
+    jsonDoc["id"] = ntp->getFullDate();
+    jsonDoc["timestamp"] = ntp->getTimeStamp();
     jsonDoc["max_temp"] = _maxTemp;
     jsonDoc["num_temp_sensors"] = _numTempSensors;
     // jsonDoc["flow_rate"] = _config.flow_rate;
     // jsonDoc["flow_rate_sensor_temp"] = _config.flow_rate_sensor_temp;
-    jsonDoc["water_level_sensor"] = waterLevelSensor->getWaterLevel();
+    jsonDoc["water_level_liters"] = waterLevelSensor->result.water_level;
+    jsonDoc["water_level_percentage"] = waterLevelSensor->result.water_level_percentage;
 
 #if USE_SHT31_SENSOR
     switch (humidity->_HUMIDITY_SENSORS_ACTIVE)
@@ -77,9 +82,7 @@ bool AccumulateData::SendData()
     jsonDoc["humidity_dht"] = humidity->result.humidity;
     jsonDoc["humidity_temp_dht"] = humidity->result.temp;
 #endif // USE_DHT_SENSOR
-#if ENABLE_PH_SUPPORT
-    jsonDoc["ph_sensor"] = phsensor->getPH();
-#endif // ENABLE_PH_SUPPORT
+
     JsonArray temp_sensor_data = jsonDoc.createNestedArray("temp_sensors");
     for (int i = 0; i < _numTempSensors; i++)
     {
@@ -91,14 +94,12 @@ bool AccumulateData::SendData()
         log_e("[Data Json Document]: Failed to write to file");
         return false;
     }
-
     if (json.length() > 0)
     {
-        cfg.config.data_json_string = json;
+        configManager->getDeviceConfig()->data_json_string.assign(json);
         serializeJsonPretty(jsonDoc, json);
         log_d("[Data Json Document]: %s", json.c_str());
         return true;
     }
-
     return false;
 }

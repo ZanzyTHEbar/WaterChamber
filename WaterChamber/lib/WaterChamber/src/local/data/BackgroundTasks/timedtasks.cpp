@@ -1,26 +1,18 @@
 
 #include "timedtasks.hpp"
 
-TimedTasks::TimedTasks(void)
-{
-}
+TimedTasks::TimedTasks(AccumulateData *accumulateData) : _Timer_1s(1000),
+                                                         _Timer_5s(5000),
+                                                         _Timer_5s_2(5000),
+                                                         _Timer_10s(10000),
+                                                         _Timer_10s_2(10000),
+                                                         _Timer_30s(30000),
+                                                         _Timer_1m(60000),
+                                                         _Timer_5m(300000),
+                                                         ntp(ntp),
+                                                         accumulateData(accumulateData) {}
 
-TimedTasks::~TimedTasks(void)
-{
-}
-
-bool TimedTasks::begin(void)
-{
-  _Timer_1s.setTime(1000);
-  _Timer_5s.setTime(5000);
-  _Timer_5s_2.setTime(5000);
-  _Timer_10s.setTime(10000);
-  _Timer_10s_2.setTime(10000);
-  _Timer_30s.setTime(30000);
-  _Timer_1m.setTime(60000);
-  _Timer_5m.setTime(300000);
-  return true;
-}
+TimedTasks::~TimedTasks(void) {}
 
 #if ENABLE_I2C_SCANNER
 void TimedTasks::ScanI2CBus(void)
@@ -43,65 +35,9 @@ void TimedTasks::ScanI2CBus(void)
 
 void TimedTasks::accumulateSensorData(void)
 {
-  if (_Timer_1s.ding())
+  if (_Timer_5s.ding())
   {
-    accumulatedata.InitAccumulateData();
-    _Timer_1s.start();
+    accumulateData->accumulateData();
+    _Timer_5s.start();
   }
 }
-
-void TimedTasks::NTPService(void)
-{
-  if (_Timer_1s.ding())
-  {
-    networkntp.NTPLoop();
-    _Timer_1s.start();
-  }
-}
-
-void TimedTasks::checkNetwork(void)
-{
-  if (_Timer_10s.ding())
-  {
-    network.CheckNetworkLoop();
-    _Timer_10s.start();
-  }
-}
-
-void TimedTasks::updateCurrentData(void) // check to see if the data has changed
-{
-  if (_Timer_10s_2.ding())
-  {
-    cfg.updateCurrentData();
-    log_i("Heap: %d", ESP.getFreeHeap());
-    _Timer_10s_2.start();
-  }
-}
-
-void TimedTasks::checkMQTTState(void) // check to see if the data has changed
-{
-  if (_Timer_10s_2.ding())
-  {
-#if ENABLE_HASS
-    hassmqtt.checkState();
-#else
-    basicmqtt.checkState();
-#endif // ENABLE_HASS
-    _Timer_10s_2.start();
-  }
-}
-
-// Run down the list and call the idle() method on each one.
-/* void TimedTasks::execute(void)
-{
-  AccumulateData *trace;
-
-  trace = (AccumulateData *)getFirst();
-  while (trace != NULL)
-  {
-    trace->execute();
-    trace = (AccumulateData *)trace->getNext();
-  }
-} */
-
-TimedTasks timedTasks;

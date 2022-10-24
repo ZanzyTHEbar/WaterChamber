@@ -5,26 +5,19 @@
 #include <idlers.h>
 #include <lists.h>
 
-#include "local/data/Config/config.hpp"
 #include "local/data/AccumulateData/accumulatedata.hpp"
 #include "local/network/ntp/ntp.hpp"
 
-
-class TimedTasks : public timeObj //, public linkList
+class TimedTasks : public timeObj
 {
 public:
-  TimedTasks(void);
+  TimedTasks(AccumulateData *accumulateData);
   virtual ~TimedTasks(void);
-  bool begin(void);
-  /* void execute(void); */
-
-  void updateCurrentData(void);
-  void checkMQTTState(void);
+  
 #if ENABLE_I2C_SCANNER
   void ScanI2CBus(void);
 #endif // ENABLE_I2C_SCANNER
   void accumulateSensorData(void);
-  void NTPService(void);
   void checkNetwork(void);
 
 private:
@@ -37,24 +30,9 @@ private:
   timeObj _Timer_30s;
   timeObj _Timer_1m;
   timeObj _Timer_5m;
+
+  NetworkNTP *ntp;
+  AccumulateData *accumulateData;
 };
 
-extern TimedTasks timedTasks;
-
 #endif
-
-/*
-
-AccumulateData data1;
-
-void setup(void) {
-   data1.begin(&sensorMgr);
-   data1.addSelf();
-}
-
-void loop() {
-   sensorMgr.checkStuff();
-   theList.execute();
-}
-
- */

@@ -16,23 +16,6 @@
 
 class WaterLevelSensor
 {
-public:
-    // Constructor
-#if USE_CAP
-    WaterLevelSensor(CalibrationButton *_calibrationButton, 
-                     TowerTemp *_towerTemp);
-#else
-    WaterLevelSensor(TowerTemp *_towerTemp);
-#endif // USE_CAP
-
-    virtual ~WaterLevelSensor();
-    void begin();
-    double readSensor();
-    // Read the water level
-
-    int getWaterLevel();
-    int getPercentage();
-
 private:
     // Private variables
     double _radius;
@@ -50,8 +33,15 @@ private:
     };
     Calibration_t _calibration;
 
+    struct Data_t
+    {
+        int water_level;
+        int water_level_percentage;
+    };
+
     // Private functions
-    int readWaterLevelUltraSonic();
+    std::shared_ptr<UltraSonicDistanceSensor> _distanceSensor; // Initialize sensor that uses digital pins 13 and 12.
+#if USE_CAP
     int readWaterLevelCapacitive();
     void calibrateSensor();
     void setCapSensorRange();
@@ -62,10 +52,28 @@ private:
     void quickCallback(void);
     void longholdCallback(void);
 
-    std::shared_ptr<UltraSonicDistanceSensor> _distanceSensor; // Initialize sensor that uses digital pins 13 and 12.
-#if USE_CAP
     CalibrationButton *_calibrationButton;
 #endif // USE_CAP
     TowerTemp *_towerTemp;
+
+public:
+    // Constructor
+#if USE_CAP
+    WaterLevelSensor(CalibrationButton *_calibrationButton,
+                     TowerTemp *_towerTemp);
+#else
+    WaterLevelSensor(TowerTemp *_towerTemp);
+#endif // USE_CAP
+
+    virtual ~WaterLevelSensor();
+    void begin();
+    double readSensor();
+    // Read the water level
+    // int getWaterLevel();
+    Data_t readWaterLevelUltraSonic();
+#if USE_CAP
+    int getPercentage();
+#endif
+    Data_t result;
 };
 #endif

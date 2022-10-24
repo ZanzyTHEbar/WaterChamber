@@ -18,12 +18,6 @@ LEDManager::ledStateMap_t LEDManager::ledStateMap = {
 	{LEDStates_e::_WiFiState_Disconnecting, {1, 500}},
 	{LEDStates_e::_WiFiState_ADHOC, {1, 500}},
 	{LEDStates_e::_WiFiState_Error, {1, 500}},
-	{LEDStates_e::_PumpState_None, {1, 500}},
-	{LEDStates_e::_PumpState_Starting, {1, 500}},
-	{LEDStates_e::_PumpState_Started, {1, 500}},
-	{LEDStates_e::_PumpState_Stopping, {1, 500}},
-	{LEDStates_e::_PumpState_Stopped, {1, 500}},
-	{LEDStates_e::_PumpState_Error, {1, 500}},
 };
 
 //! TODO: Change the parameters for each LED state to be unique.

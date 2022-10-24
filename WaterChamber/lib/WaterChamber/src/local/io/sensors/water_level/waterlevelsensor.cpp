@@ -27,7 +27,9 @@ WaterLevelSensor::WaterLevelSensor(TowerTemp *_towerTemp) : _towerTemp(_towerTem
                                                             _qNumberDepth{0},
                                                             _distanceSensor{std::make_shared<UltraSonicDistanceSensor>(ECHO_PIN, TRIG_PIN)} {}
 #endif // USE_CAP
-WaterLevelSensor::~WaterLevelSensor() {}
+WaterLevelSensor::~WaterLevelSensor()
+{
+}
 
 void WaterLevelSensor::begin()
 {
@@ -220,12 +222,12 @@ double WaterLevelSensor::readSensor()
 
 #endif
 
-int WaterLevelSensor::readWaterLevelUltraSonic()
+WaterLevelSensor::Data_t WaterLevelSensor::readWaterLevelUltraSonic()
 {
     if (readSensor() <= 0.0)
     {
         log_i("Failed to read ultrasonic sensor.");
-        return 0.0;
+        return {0.0, 0.0};
     }
 
     // tank diameter and height, in centimeters
@@ -242,16 +244,16 @@ int WaterLevelSensor::readWaterLevelUltraSonic()
     if (isnan(p))
     {
         log_e("Error: %s", "Sensor Value is NaN");
-        return 0.0;
+        return {0.0, 0.0};
     }
-    return (int)p;
+    return {stock, (int)p};
 }
 
-int WaterLevelSensor::getWaterLevel()
+/* int WaterLevelSensor::getWaterLevel()
 {
 #if USE_CAP
     return getPercentage();
 #else
     return readWaterLevelUltraSonic();
 #endif // USE_CAP
-}
+} */
