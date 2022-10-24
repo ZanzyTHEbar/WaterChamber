@@ -9,6 +9,7 @@
 #include <functional>
 #include <HCSR04.h>
 
+#include "data/utilities/Network_Utilities.hpp"
 #include "local/io/sensors/temperature/towertemp.hpp"
 
 class WaterLevelSensor
@@ -23,16 +24,16 @@ private:
         int water_level_percentage;
     };
 
-    // Private functions
-    std::shared_ptr<UltraSonicDistanceSensor> _distanceSensor; // Initialize sensor that uses digital pins 13 and 12.
     TowerTemp *_towerTemp;
+    std::shared_ptr<UltraSonicDistanceSensor> _distanceSensor; // Initialize sensor that uses digital pins 13 and 12.
+    // Private functions
+    double readSensor();
 
 public:
     // Constructor
     WaterLevelSensor(TowerTemp *_towerTemp);
     virtual ~WaterLevelSensor();
     void begin();
-    double readSensor();
     // Read the water level
     Data_t readWaterLevelUltraSonic();
     Data_t result;

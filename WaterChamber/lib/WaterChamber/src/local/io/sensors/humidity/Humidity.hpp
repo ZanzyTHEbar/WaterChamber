@@ -40,7 +40,7 @@ public:
   Humidity();
   virtual ~Humidity();
 
-  void setup();
+  void begin();
   // Initialize the library
   enum _HUMIDITY_SENSORS_ACTIVE
   {
@@ -67,7 +67,7 @@ public:
 
   Hum result;
 
-  _HUMIDITY_SENSORS_ACTIVE begin();
+  _HUMIDITY_SENSORS_ACTIVE setup();
 #if USE_DHT_SENSOR
   Hum readDHT();
 #endif // USE_DHT_SENSOR

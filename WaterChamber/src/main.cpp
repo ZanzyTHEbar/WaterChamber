@@ -92,6 +92,9 @@ void setup()
   }
   }
   ota.SetupOTA();
+  humidity.begin();
+  tower_temp.begin();
+  waterLevelSensor.begin();
 }
 
 void loop()

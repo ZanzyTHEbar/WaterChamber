@@ -19,13 +19,13 @@ Humidity::Humidity() : _delayS(0),
 
 Humidity::~Humidity() {}
 
-void Humidity::setup()
+void Humidity::begin()
 {
   auto hum_iter = humidity_sensors_map.find(_humiditySensorsActive);
   if (hum_iter != humidity_sensors_map.end())
   {
     Serial.println(F("Found humidity sensor"));
-    humidity_sensors_map[begin()];
+    humidity_sensors_map[setup()];
   }
   else
   {
@@ -51,7 +51,7 @@ void checkISNAN(const char *msg, float data)
  * Parameters: None
  * Return: Enum _HUMIDITY_SENSORS_ACTIVE
  ******************************************************************************/
-Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::begin()
+Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::setup()
 {
   humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_NONE, [&](void) -> void
                                { Serial.println(F("Humidity Sensor Setup Failed - No sensors present")); });

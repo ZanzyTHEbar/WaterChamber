@@ -19,6 +19,15 @@ void WaterLevelSensor::begin()
     _height = RES_HEIGHT;
 }
 
+double WaterLevelSensor::readSensor()
+{
+    double distance = _distanceSensor->measureDistanceCm(_towerTemp->temp_sensor_results.temp[0]);
+    log_d("Distance: %.3f cm", distance, DEC);
+    // Every 1 second, do a measurement using the sensor and print the distance in centimeters.
+    Network_Utilities::my_delay(1L);
+    return distance;
+}
+
 WaterLevelSensor::Data_t WaterLevelSensor::readWaterLevelUltraSonic()
 {
     if (readSensor() <= 0.0)
