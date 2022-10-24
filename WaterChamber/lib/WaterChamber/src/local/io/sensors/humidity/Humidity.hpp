@@ -80,7 +80,7 @@ public:
 #endif // USE_SHT31_SENSOR
 
   // Variables
-  static std::unordered_map<_HUMIDITY_SENSORS_ACTIVE, std::function<void(void)>> humidity_sensors_map;
+  static std::unordered_map<_HUMIDITY_SENSORS_ACTIVE, std::string> humidity_sensors_map;
 
 private:
   uint32_t _delayS;

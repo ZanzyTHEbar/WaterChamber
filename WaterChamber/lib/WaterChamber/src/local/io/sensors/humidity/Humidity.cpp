@@ -1,8 +1,17 @@
 #include "Humidity.hpp"
 
-std::unordered_map<Humidity::_HUMIDITY_SENSORS_ACTIVE, std::function<void(void)>> humidity_sensors_map(0);
+std::unordered_map<Humidity::_HUMIDITY_SENSORS_ACTIVE, std::string> Humidity::humidity_sensors_map = {
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_NONE, "Humidity Sensor Setup Failed - initialised to NONE"},
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_SHT31, "Humidity Sensor Setup - initialised to SHT31"},
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_SHT31_2, "Humidity Sensor Setup - initialised to SHT31_2"},
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_BOTH, "Humidity Sensor Setup - initialised to BOTH"},
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_DHT, "Humidity Sensor Setup - initialised to DHT"},
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_DHT_SHT31, "Humidity Sensor Setup - initialised to DHT_SHT31"},
+    {Humidity::_HUMIDITY_SENSORS_ACTIVE::HUMIDITY_SENSORS_ACTIVE_DHT_SHT31_2, "Humidity Sensor Setup - initialised to DHT_SHT31_2"},
+}; // end of map
 
 Humidity::Humidity() : _delayS(0),
+                       _humiditySensorsActive(HUMIDITY_SENSORS_ACTIVE_NONE),
 #if USE_DHT_SENSOR
                        dht{std::make_shared<DHT_Unified>(DHTPIN, DHTTYPE)}
 #endif // USE_DHT_SENSOR
@@ -12,7 +21,6 @@ Humidity::Humidity() : _delayS(0),
                        _loopCnt(0),
                        sht31{std::make_shared<Adafruit_SHT31>()},
                        sht31_2{std::make_shared<Adafruit_SHT31>()},
-                       _humiditySensorsActive(HUMIDITY_SENSORS_ACTIVE_NONE)
 #endif // USE_SHT31_SENSOR
 {
 }
@@ -21,11 +29,12 @@ Humidity::~Humidity() {}
 
 void Humidity::begin()
 {
-  auto hum_iter = humidity_sensors_map.find(_humiditySensorsActive);
+  auto hum_iter = humidity_sensors_map.find(setup());
   if (hum_iter != humidity_sensors_map.end())
   {
     Serial.println(F("Found humidity sensor"));
-    humidity_sensors_map[setup()];
+    Serial.println(F(hum_iter->second.c_str()));
+    // humidity_sensors_map[_humiditySensorsActive];
   }
   else
   {
@@ -53,21 +62,6 @@ void checkISNAN(const char *msg, float data)
  ******************************************************************************/
 Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::setup()
 {
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_NONE, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup Failed - No sensors present")); });
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_SHT31, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup Failed - initialised sensor one")); });
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_SHT31_2, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup Failed - initialised sensor two")); });
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_BOTH, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup Failed - initialised both sensors")); });
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_DHT, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup Failed - initialised DHT sensor")); });
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_DHT_SHT31, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup DHT and SHT31 - initialised two sensors")); });
-  humidity_sensors_map.emplace(HUMIDITY_SENSORS_ACTIVE_DHT_SHT31_2, [&](void) -> void
-                               { Serial.println(F("Humidity Sensor Setup DHT and SHT31 - initialised three sensors")); });
-
 #if USE_DHT_SENSOR
   // Initialize the DHT sensor.
   dht->begin();
@@ -127,7 +121,7 @@ Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::setup()
     _humiditySensorsActive = HUMIDITY_SENSORS_ACTIVE_BOTH;
   }
   delay(2L); // delay in between reads for stability
-#endif          // USE_SHT31_SENSOR
+#endif       // USE_SHT31_SENSOR
   return _humiditySensorsActive;
 }
 
