@@ -44,7 +44,6 @@ TimedTasks timedTasks(&data);
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Hello, EasyNetworkManager!");
 
   Serial.setDebugOutput(true);
   configManager.initConfig(); // call before load to initialise the structs
