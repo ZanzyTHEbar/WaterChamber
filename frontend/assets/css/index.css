@@ -8,22 +8,25 @@
 @tailwind utilities;
 
 @layer components {
-  .card {
-    background-color: theme('colors.white');
-    border-radius: theme('borderRadius.lg');
-    padding: theme('spacing.6');
-    box-shadow: theme('boxShadow.xl');
-  }
+    .card {
+        background-color: theme("colors.white");
+        border-radius: theme("borderRadius.lg");
+        padding: theme("spacing.6");
+        box-shadow: theme("boxShadow.xl");
+    }
 }
 
 #root {
-  text-align: center;
+    text-align: center;
 }
 
 body {
     margin: 0;
     font-family: "Ubuntu", sans-serif;
     cursor: default;
+    background-color: #ffffff;
+    color: #0b0c10;
+    text-align: center;
 }
 
 .App {
@@ -31,6 +34,7 @@ body {
     color: #0b0c10;
     text-align: center;
     padding: 5px;
+    height: 100vh;
 }
 
 .main-div {
