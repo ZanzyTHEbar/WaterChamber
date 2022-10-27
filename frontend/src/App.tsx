@@ -1,6 +1,6 @@
 // import AppRoutes from "./routes/frontend/Routes";
 // import { Outlet } from "react-router-dom";
-import MainWindow from "@pages/Calendar";
+import MainWindow from "@pages/FrontEnd";
 /* import { appWindow } from "@tauri-apps/api/window";
 await appWindow.setDecorations(false); */
 

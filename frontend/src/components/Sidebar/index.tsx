@@ -1,6 +1,4 @@
-import CreateEventButton from "@components/CreateEventButton";
-import Labels from "@components/Labels";
-import SmallCalendar from "@components/SmallCalendar";
+
 import React from "react";
 export default function Sidebar() {
     return (
@@ -13,9 +11,9 @@ export default function Sidebar() {
                 borderBottomRightRadius: "8px",
             }}
         >
-            <CreateEventButton />
+            {/* <CreateEventButton />
             <SmallCalendar />
-            <Labels />
+            <Labels /> */}
         </aside>
     );
 }

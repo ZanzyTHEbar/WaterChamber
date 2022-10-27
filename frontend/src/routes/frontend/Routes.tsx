@@ -1,4 +1,4 @@
-import AntxChatDesign01 from "@pages/Calendar";
+import AntxChatDesign01 from "@pages/FrontEnd";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 /* import AntxChatDesign02 from "../../pages/ETVRPage02"; */
 
