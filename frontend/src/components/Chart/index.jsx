@@ -74,24 +74,23 @@ class Chart extends React.Component {
 
     updateSeries = () => {
         // The chart is updated only with new options.
-        setInterval(function () {
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    const x = new Date().getTime(),
-                        y = parseFloat(this.responseText);
-                    console.log(this.responseText);
-                    console.log("Testing");
-                    if (this.state.chartOptions.series[0].data.length > 40) {
-                        this.state.chartOptions.series[0].addPoint([x, y], true, true, true);
-                    } else {
-                        this.state.chartOptions.series[0].addPoint([x, y], true, false, true);
-                    }
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                const x = new Date().getTime(),
+                    y = parseFloat(this.responseText);
+                console.log(this.responseText);
+                console.log("Testing");
+                if (this.state.chartOptions.series[0].data.length > 40) {
+                    this.state.chartOptions.series[0].addPoint([x, y], true, true, true);
+                } else {
+                    this.state.chartOptions.series[0].addPoint([x, y], true, false, true);
                 }
-            };
-            xhttp.open("GET", "http://water_chamber.local/api/v1/json/command/data", true);
-            xhttp.send();
-        }, 3000);
+            }
+        };
+        xhttp.open("GET", "http://water_chamber.local/api/v1/json/command/data", true);
+        xhttp.send();
+        console.log("Updating");
     };
 
     render() {
