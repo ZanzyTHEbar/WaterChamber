@@ -1,18 +1,22 @@
 import logo from "/images/logo.png";
 
 export default function Header() {
-    
     return (
-        <header className="px-4 py-2 flex items-center">
+        <header
+            className="px-4 py-2 flex items-center"
+            style={{
+                paddingTop: "20px",
+            }}
+        >
             <img src={logo} alt="logo" className="mr-2 w-12 h-12" />
             <h1 className="mr-10 text-xl text-gray-500 fond-bold">
-                Outlook Knight
+                <span className="text-gray-900">Water Chamber</span> Data
             </h1>
-            <button
+            {/* <button
                 onClick={handleReset}
                 className="border rounded py-2 px-4 mr-5 shadow-md hover:shadow-xl focus:bg-gray-100 transition duration-200 ease-in focus:shadow-inner"
             >
-                Today
+                Reset
             </button>
             <button onClick={handlePrevMonth}>
                 <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
@@ -23,9 +27,9 @@ export default function Header() {
                 <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
                     chevron_right
                 </span>
-            </button>
+            </button> */}
             <h2 className="ml-4 text-xl text-gray-500 font-bold">
-                
+                <span className="text-gray-900">ESP32</span> Data Logger
             </h2>
         </header>
     );

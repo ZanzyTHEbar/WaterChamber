@@ -10,25 +10,23 @@ import * as React from "react";
 
 export function Main() {
     const Main = () => (
-        <React.Fragment>
-            <div className="h-screen flex flex-col">
-                <Header />
-                <div
-                    className="flex flex-1"
-                    style={{
-                        borderTopLeftRadius: "8px",
-                        borderTopRightRadius: "8px",
-                    }}
-                >
-                    <Sidebar />
-                </div>
+        <div
+            className="h-fit flex flex-col"
+            style={{
+                height: "97vh",
+            }}
+        >
+            <Header />
+            <div
+                className="flex flex-1"
+                style={{
+                    paddingBottom: "20px",
+                }}
+            >
+                <Sidebar />
             </div>
-        </React.Fragment>
+        </div>
     );
 
-    return (
-        <React.Fragment>
-            <Main />
-        </React.Fragment>
-    );
+    return <Main />;
 }

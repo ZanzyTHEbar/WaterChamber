@@ -4,15 +4,12 @@
     user-select: none;
     display: flex;
     justify-content: flex-end;
-    /* position: fixed; */
     top: 0;
     left: 0;
     right: 0;
 
     position: sticky;
     z-index: 1;
-    /* border-top-left-radius: 8px;
-    border-top-right-radius: 8px; */
 }
 
 .titlebar-button {
