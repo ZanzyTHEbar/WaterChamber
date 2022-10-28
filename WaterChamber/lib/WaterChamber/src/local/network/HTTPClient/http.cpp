@@ -28,8 +28,8 @@ void NetworkHTTP::loop(const JsonDocument &local_doc)
     data.num_temp_sensors.assign(local_doc["num_temp_sensors"].as<std::string>());
     data.water_level_liters.assign(local_doc["water_level_liters"].as<std::string>());
     data.water_level_percentage.assign(local_doc["water_level_percentage"].as<std::string>());
-    data.humidity.assign(local_doc["humidity"].as<std::string>());
-    data.humidity_temp.assign(local_doc["humidity_temp"].as<std::string>());
+    data.humidity.assign(local_doc["humidity_dht"].as<std::string>());
+    data.humidity_temp.assign(local_doc["humidity_temp_dht"].as<std::string>());
     for (int i = 0; i < 10; i++)
     {
         data.temp_sensors[i].assign(local_doc["temp_sensors"][i].as<std::string>());
