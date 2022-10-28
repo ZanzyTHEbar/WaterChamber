@@ -15,12 +15,14 @@
 #include "local/io/sensors/water_level/waterlevelsensor.hpp"
 // Time stamp
 #include "local/network/ntp/ntp.hpp"
+#include "local/network/HTTPClient/http.hpp"
 
 class AccumulateData
 {
 public:
     AccumulateData(ProjectConfig *configManager,
                    NetworkNTP *ntp,
+                   NetworkHTTP *http,
                    TowerTemp *tower_temp,
                    Humidity *humidity,
                    WaterLevelSensor *waterLevelSensor);
@@ -36,9 +38,9 @@ private:
 
     ProjectConfig *configManager;
     NetworkNTP *ntp;
+    NetworkHTTP *http;
     TowerTemp *tower_temp;
     Humidity *humidity;
     WaterLevelSensor *waterLevelSensor;
-
 };
 #endif

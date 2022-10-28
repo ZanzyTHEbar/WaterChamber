@@ -2,12 +2,14 @@
 
 AccumulateData::AccumulateData(ProjectConfig *configManager,
                                NetworkNTP *ntp,
+                               NetworkHTTP *http,
                                TowerTemp *tower_temp,
                                Humidity *humidity,
                                WaterLevelSensor *waterLevelSensor) : _maxTemp(100),
                                                                      _numTempSensors(0),
                                                                      configManager(configManager),
                                                                      ntp(ntp),
+                                                                     http(http),
                                                                      tower_temp(tower_temp),
                                                                      humidity(humidity),
                                                                      waterLevelSensor(waterLevelSensor) {}
@@ -97,6 +99,7 @@ bool AccumulateData::accumulateData()
     if (json.length() > 0)
     {
         configManager->getDeviceConfig()->data_json_string.assign(json);
+        http->loop(jsonDoc);
         serializeJsonPretty(jsonDoc, json);
         log_d("[Data Json Document]: %s", json.c_str());
         return true;

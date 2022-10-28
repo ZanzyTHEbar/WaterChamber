@@ -9,6 +9,7 @@
 #include <ota/OTA.hpp>
 #include <wifihandler/wifiHandler.hpp>
 #include <api/webserverHandler.hpp>
+#include "local/network/HTTPClient/http.hpp"
 
 // Data
 #include <local/data/AccumulateData/accumulatedata.hpp>
@@ -34,11 +35,12 @@ OTA ota(&configManager);
 MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "_tcp", "api_port", "80");
 
 NetworkNTP ntp;
+NetworkHTTP http;
 TowerTemp tower_temp;
 Humidity humidity;
 WaterLevelSensor waterLevelSensor(&tower_temp);
 
-AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSensor);
+AccumulateData data(&configManager, &ntp, &http, &tower_temp, &humidity, &waterLevelSensor);
 TimedTasks timedTasks(&data);
 
 void setup()
