@@ -46,7 +46,7 @@ void NetworkHTTP::loop(const JsonDocument &local_doc)
     _url += "&humidity_temp=" + data.humidity_temp;
     for (int i = 0; i < 10; i++)
     {
-        _url += "&temp_sensors_" + std::to_string(i) + "=" + data.temp_sensors[i];
+        _url += "&temp_sensors=" + data.temp_sensors[i];
     }
     // Send the data
     http->begin(_url.c_str());
