@@ -35,7 +35,7 @@ OTA ota(&configManager);
 MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "_tcp", "api_port", "80");
 
 NetworkNTP ntp;
-NetworkHTTP http;
+NetworkHTTP http(GOOGLE_SCRIPT_ID);
 TowerTemp tower_temp;
 Humidity humidity;
 WaterLevelSensor waterLevelSensor(&tower_temp);
