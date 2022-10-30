@@ -33,7 +33,7 @@ public:
 
 private:
     void readAddresses(DeviceAddress deviceAddress);
-    void printAddress(DeviceAddress deviceAddress);
+    std::string printAddress(DeviceAddress deviceAddress, size_t size);
 
 private:
     int _sensors_count;
@@ -43,5 +43,6 @@ private:
     std::shared_ptr<DallasTemperature> sensors;
     // variable to hold device addresses
     DeviceAddress temp_sensor_addresses;
+    size_t size;
 };
 #endif
