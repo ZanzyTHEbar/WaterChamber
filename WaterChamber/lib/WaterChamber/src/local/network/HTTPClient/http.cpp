@@ -47,7 +47,7 @@ void NetworkHTTP::loop(const JsonDocument &local_doc)
     for (int i = 0; i < 10; i++)
     {
         _url += "&temp_sensors=" + data.temp_sensors[i];
-    }
+    } 
     // Send the data
     http->begin(_url.c_str());
     int httpCode = http->GET();
