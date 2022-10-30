@@ -34,7 +34,6 @@ void Humidity::begin()
   {
     Serial.println(F("Found humidity sensor"));
     Serial.println(F(hum_iter->second.c_str()));
-    // humidity_sensors_map[_humiditySensorsActive];
   }
   else
   {
@@ -72,25 +71,25 @@ Humidity::_HUMIDITY_SENSORS_ACTIVE Humidity::setup()
   dht->temperature().getSensor(&sensor);
   log_d("------------------------------------");
   log_d("Temperature Sensor");
-  log_d("Sensor Type: %c", sensor.name);
+  log_d("Sensor Type: %s", sensor.name);
   log_d("Driver Ver: %d", sensor.version);
   log_d("Unique ID:  %d", sensor.sensor_id);
-  log_d("Max Value: %d °C", sensor.max_value);
-  log_d("Min Value: %d °C", sensor.min_value);
-  log_d("Resolution: %d °C", sensor.resolution);
+  log_d("Max Value: %.3f °C", sensor.max_value);
+  log_d("Min Value: %.3f °C", sensor.min_value);
+  log_d("Resolution: %.3f °C", sensor.resolution);
   log_d("------------------------------------");
   // Print humidity sensor details.
   dht->humidity().getSensor(&sensor);
   log_d("Humidity Sensor");
-  log_d("Sensor Type: %c", sensor.name);
+  log_d("Sensor Type: %s", sensor.name);
   log_d("Driver Ver: %d", sensor.version);
   log_d("Unique ID:  %d", sensor.sensor_id);
-  log_d("Max Value:  %d %%", sensor.max_value);   // 100%
-  log_d("Min Value:  %d %%", sensor.min_value);   // 0%
-  log_d("Resolution:  %d %%", sensor.resolution); // 0.5%
+  log_d("Max Value: %.3f °C", sensor.max_value);
+  log_d("Min Value: %.3f °C", sensor.min_value);
+  log_d("Resolution: %.3f °C", sensor.resolution);
   log_d("------------------------------------");
   // Set delay between sensor readings based on sensor details.
-  _delayS = sensor.min_delay / 1000000;
+  _delayS = sensor.min_delay / 1000;
   log_d("Delay: %d ms", _delayS);
   log_d("------------------------------------");
   log_d("");
