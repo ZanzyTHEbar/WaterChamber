@@ -8,7 +8,7 @@
 //************************************************************************************************************************
 
 WaterLevelSensor::WaterLevelSensor(TowerTemp *_towerTemp) : _towerTemp(_towerTemp),
-                                                            _distanceSensor{std::make_shared<UltraSonicDistanceSensor>(ECHO_PIN, TRIG_PIN)} {}
+                                                            _distanceSensor{std::make_shared<UltraSonicDistanceSensor>(TRIG_PIN, ECHO_PIN)} {}
 WaterLevelSensor::~WaterLevelSensor()
 {
 }
@@ -21,10 +21,11 @@ void WaterLevelSensor::begin()
 
 double WaterLevelSensor::readSensor()
 {
+    Network_Utilities::my_delay(1L);
     double distance = _distanceSensor->measureDistanceCm(_towerTemp->temp_sensor_results.temp[0]);
     log_d("Distance: %.3f cm", distance, DEC);
+    log_d("Temperature: %.3f °C", _towerTemp->temp_sensor_results.temp[0], DEC);
     // Every 1 second, do a measurement using the sensor and print the distance in centimeters.
-    Network_Utilities::my_delay(1L);
     return distance;
 }
 
@@ -32,6 +33,7 @@ WaterLevelSensor::Data_t WaterLevelSensor::readWaterLevelUltraSonic()
 {
     if (readSensor() <= 0.0)
     {
+        log_i("Distance greater than 400cm");
         log_i("Failed to read ultrasonic sensor.");
         return {0, 0};
     }
@@ -52,5 +54,6 @@ WaterLevelSensor::Data_t WaterLevelSensor::readWaterLevelUltraSonic()
         log_e("Error: %s", "Sensor Value is NaN");
         return {0, 0};
     }
-    return {(int)stock, (int)p};
+    result = {stock, p};
+    return result;
 }

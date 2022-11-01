@@ -17,6 +17,7 @@ public:
     NetworkNTP();
     virtual ~NetworkNTP();
     // Functions
+    void begin();
     void NTPLoop();
 #if NTP_MANUAL_ENABLED
     time_t getNtpTime();
@@ -42,10 +43,10 @@ private:
     // NTP Servers:
     static const char ntpServerName[16];
     unsigned int localPort; // local port to listen for UDP packets
-    const int timeZone;
+    int timeZone;
 
     time_t prevDisplay; // when the digital clock was displayed
-    std::unique_ptr<WiFiUDP> ntpUDP;
-    std::unique_ptr<NTPClient> timeClient;
+    WiFiUDP ntpUDP;
+    NTPClient timeClient;
 };
 #endif

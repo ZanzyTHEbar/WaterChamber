@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <secrets.h>
+#include <secrets.h> // WiFi credentials - not included in repo you need to create this file in the /includes directory
 // Config
 #include <data/config/project_config.hpp>
 #include <data/StateManager/StateManager.hpp>
@@ -9,8 +9,9 @@
 #include <ota/OTA.hpp>
 #include <wifihandler/wifiHandler.hpp>
 #include <api/webserverHandler.hpp>
+#if USE_GOOGLE_SHEETS
 #include "local/network/HTTPClient/http.hpp"
-
+#endif // USE_GOOGLE_SHEETS
 // Data
 #include <local/data/AccumulateData/accumulatedata.hpp>
 
@@ -34,14 +35,16 @@ APIServer server(80, &configManager, NULL, "/api/v1", "/wifimanager", "/userComm
 OTA ota(&configManager);
 MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "_tcp", "api_port", "80");
 
-// NetworkNTP ntp;
-// NetworkHTTP http(GOOGLE_SCRIPT_ID);
+NetworkNTP ntp;
+#if USE_GOOGLE_SHEETS
+NetworkHTTP http(GOOGLE_SCRIPT_ID);
+#endif // USE_GOOGLE_SHEETS
 TowerTemp tower_temp;
 Humidity humidity;
 WaterLevelSensor waterLevelSensor(&tower_temp);
 
-// AccumulateData data(&configManager, &ntp, &http, &tower_temp, &humidity, &waterLevelSensor);
-// TimedTasks timedTasks(&data);
+AccumulateData data(&configManager, &ntp, &http, &tower_temp, &humidity, &waterLevelSensor);
+TimedTasks timedTasks(&data);
 
 void setup()
 {
@@ -92,6 +95,10 @@ void setup()
 		break;
 	}
 	}
+	ntp.begin();
+#if USE_GOOGLE_SHEETS
+	http.begin();
+#endif // USE_GOOGLE_SHEETS
 	ota.SetupOTA();
 	humidity.begin();
 	tower_temp.begin();
@@ -101,6 +108,6 @@ void setup()
 void loop()
 {
 	ota.HandleOTAUpdate();
-	// data.loop();
-	// timedTasks.accumulateSensorData();
+	data.loop();
+	timedTasks.accumulateSensorData();
 }

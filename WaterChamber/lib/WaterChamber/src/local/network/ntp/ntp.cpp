@@ -20,14 +20,15 @@ const char NetworkNTP::ntpServerName[] = "us.pool.ntp.org";
 NetworkNTP::NetworkNTP() : _formattedDate(""),
                            _dayStamp(""),
                            _timeStamp(""),
-                           ntpUDP(new WiFiUDP()),
-                           timeClient(new NTPClient(*ntpUDP)),
-                           timeZone(TIME_ZONE_OFFSET),
                            localPort(8888),
-                           prevDisplay(0)
+                           timeClient(ntpUDP),
+                           prevDisplay(0) {}
+
+void NetworkNTP::begin()
 {
-    timeClient->begin();
-    timeClient->setTimeOffset(timeZone);
+    timeZone = TIME_ZONE_OFFSET;
+    timeClient.begin();
+    timeClient.setTimeOffset(timeZone);
 }
 
 NetworkNTP::~NetworkNTP() {}
@@ -142,14 +143,14 @@ void NetworkNTP::sendNTPpacket(IPAddress &address)
 
 void NetworkNTP::NTPLoop()
 {
-    if (!timeClient->update())
+    if (!timeClient.update())
     {
-        timeClient->forceUpdate();
+        timeClient.forceUpdate();
     }
     // The _formattedDate comes with the following format:
     // 2022-05-28T16:00:13Z
     // We need to extract date and time
-    _formattedDate = timeClient->getFormattedDate();
+    _formattedDate = timeClient.getFormattedDate();
     log_d("Formatted Date: %s", _formattedDate.c_str());
 
     int splitT = _formattedDate.indexOf("T");
@@ -177,16 +178,16 @@ String NetworkNTP::getTimeStamp()
 
 String NetworkNTP::getYear()
 {
-    return timeClient->getFormattedDate().substring(0, 4);
+    return timeClient.getFormattedDate().substring(0, 4);
 }
 
 String NetworkNTP::getMonth()
 {
-    return timeClient->getFormattedDate().substring(5, 7);
+    return timeClient.getFormattedDate().substring(5, 7);
 }
 
 String NetworkNTP::getDay()
 {
-    return timeClient->getFormattedDate().substring(8, 10);
+    return timeClient.getFormattedDate().substring(8, 10);
 }
 #endif // NTP_MANUAL_ENABLED

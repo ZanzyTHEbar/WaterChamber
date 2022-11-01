@@ -99,7 +99,9 @@ bool AccumulateData::accumulateData()
     if (json.length() > 0)
     {
         configManager->getDeviceConfig()->data_json_string.assign(json);
+#if USE_GOOGLE_SHEETS
         http->loop(jsonDoc);
+#endif // USE_GOOGLE_SHEETS
         serializeJsonPretty(jsonDoc, json);
         log_d("[Data Json Document]: %s", json.c_str());
         return true;

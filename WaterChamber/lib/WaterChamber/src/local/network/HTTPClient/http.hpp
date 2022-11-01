@@ -29,7 +29,7 @@ private:
     std::unique_ptr<HTTPClient> http;
     std::string _google_script_id;
     std::string _url;
-
+    int httpCode;
     struct Data {
         std::string id;
         std::string timestamp;

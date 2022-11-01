@@ -24,7 +24,7 @@
 #elif (USE_DHT22)
 #define DHTTYPE DHT22 // DHT 22 (AM2302)
 #elif (USE_DHT21)
-#define DHTTYPE DHT22 // DHT 22 (AM2302)
+#define DHTTYPE DHT21 // DHT 22 (AM2302)
 #endif
 
 #endif // USE_DHT_SENSOR
@@ -53,12 +53,14 @@ public:
   {
     float temp;
     float humidity;
+#if USE_SHT31_SENSOR
     float temp_2;
     float humidity_2;
     float humidity_sht31;
     float temp_sht31;
     float humidity_sht31_2;
     float temp_sht31_2;
+#endif // USE_SHT31_SENSOR
   };
 
   Hum result;

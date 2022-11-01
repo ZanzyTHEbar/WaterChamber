@@ -20,8 +20,8 @@ private:
     double _height;
     struct Data_t
     {
-        int water_level;
-        int water_level_percentage;
+        double water_level;
+        double water_level_percentage;
     };
 
     TowerTemp *_towerTemp;

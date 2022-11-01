@@ -43,14 +43,9 @@ void Humidity::begin()
 
 void checkISNAN(const char *msg, float data)
 {
-  if (!isnan(data))
-  { // check if 'is not a number'
-    log_d("%s = %.3f\t\t", msg, data);
-  }
-  else
-  {
-    log_d("Failed to read %s\t\t", msg);
-  }
+  char buffer[sizeof(msg) + sizeof(data) + 43];
+  snprintf(buffer, sizeof(buffer), (!isnan(data)) ? "%s: %.3f" : "failed to read water level sensor %s: %.3f", msg, data);
+  log_d("%s", buffer);
 }
 
 /******************************************************************************
@@ -132,11 +127,11 @@ Humidity::Hum Humidity::readDHT()
   // Get temperature event and print its value.
   sensors_event_t event;
   dht->temperature().getEvent(&event);
+  result.temp = event.temperature;
   checkISNAN("Temperature", event.temperature);
   // Get humidity event and print its value.
   dht->humidity().getEvent(&event);
   checkISNAN("Humidity", event.relative_humidity);
-  result.temp = event.temperature;
   result.humidity = event.relative_humidity;
   return result;
 }
