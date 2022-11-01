@@ -1,7 +1,6 @@
 #ifndef ACCUMULATEDATA_HPP
 #define ACCUMULATEDATA_HPP
 #include <ArduinoJson.h>
-#include <lists.h>
 #include <vector>
 
 // data Struct
@@ -15,14 +14,17 @@
 #include "local/io/sensors/water_level/waterlevelsensor.hpp"
 // Time stamp
 #include "local/network/ntp/ntp.hpp"
+#if USE_GOOGLE_SHEETS
 #include "local/network/HTTPClient/http.hpp"
-
+#endif // USE_GOOGLE_SHEETS
 class AccumulateData
 {
 public:
     AccumulateData(ProjectConfig *configManager,
                    NetworkNTP *ntp,
+#if USE_GOOGLE_SHEETS
                    NetworkHTTP *http,
+#endif // USE_GOOGLE_SHEETS
                    TowerTemp *tower_temp,
                    Humidity *humidity,
                    WaterLevelSensor *waterLevelSensor);
@@ -38,7 +40,9 @@ private:
 
     ProjectConfig *configManager;
     NetworkNTP *ntp;
+#if USE_GOOGLE_SHEETS
     NetworkHTTP *http;
+#endif // USE_GOOGLE_SHEETS
     TowerTemp *tower_temp;
     Humidity *humidity;
     WaterLevelSensor *waterLevelSensor;

@@ -2,17 +2,23 @@
 
 AccumulateData::AccumulateData(ProjectConfig *configManager,
                                NetworkNTP *ntp,
+#if USE_GOOGLE_SHEETS
                                NetworkHTTP *http,
+#endif // USE_GOOGLE_SHEETS
                                TowerTemp *tower_temp,
                                Humidity *humidity,
                                WaterLevelSensor *waterLevelSensor) : _maxTemp(100),
                                                                      _numTempSensors(0),
                                                                      configManager(configManager),
                                                                      ntp(ntp),
+#if USE_GOOGLE_SHEETS
                                                                      http(http),
+#endif // USE_GOOGLE_SHEETS
                                                                      tower_temp(tower_temp),
                                                                      humidity(humidity),
-                                                                     waterLevelSensor(waterLevelSensor) {}
+                                                                     waterLevelSensor(waterLevelSensor)
+{
+}
 
 AccumulateData::~AccumulateData() {}
 

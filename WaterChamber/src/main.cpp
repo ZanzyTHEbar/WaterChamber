@@ -43,7 +43,11 @@ TowerTemp tower_temp;
 Humidity humidity;
 WaterLevelSensor waterLevelSensor(&tower_temp);
 
+#if USE_GOOGLE_SHEETS
 AccumulateData data(&configManager, &ntp, &http, &tower_temp, &humidity, &waterLevelSensor);
+#else
+AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSensor);
+#endif // USE_GOOGLE_SHEETS
 TimedTasks timedTasks(&data);
 
 void setup()
