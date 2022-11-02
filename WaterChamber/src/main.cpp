@@ -28,12 +28,14 @@
 #include "local/data/BackgroundTasks/timedtasks.hpp"
 
 // Objects
-ProjectConfig configManager(std::string(), "waterchamber");
-WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, "waterchamber", 1);
+std::string hostname = "waterchamber";
 
-APIServer server(80, &configManager, NULL, "/api/v1", "/wifimanager", "/userCommands");
-OTA ota(&configManager);
-MDNSHandler mDNS(&mdnsStateManager, &configManager, "_waterchamber", "data", "_tcp", "api_port", "80");
+ProjectConfig configManager(std::string(), hostname);
+WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, hostname, 1);
+
+APIServer server(80, &configManager, "/api/v1", "/wifimanager", "/userCommands");
+OTA ota(&configManager, hostname);
+MDNSHandler mDNS(&mdnsStateManager, &configManager, ("_" + hostname), "data", "_tcp", "api_port", "80");
 
 NetworkNTP ntp;
 #if USE_GOOGLE_SHEETS
@@ -49,6 +51,11 @@ AccumulateData data(&configManager, &ntp, &http, &tower_temp, &humidity, &waterL
 AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSensor);
 #endif // USE_GOOGLE_SHEETS
 TimedTasks timedTasks(&data);
+
+void printHelloWorld()
+{
+	Serial.println("Hello World");
+}
 
 void setup()
 {
@@ -85,7 +92,7 @@ void setup()
 	{
 		// only start the API server if we have wifi connection
 		// server.updateCommandHandlers("blink", blink);                // add a command handler to the API server - you can add as many as you want - you can also add methods.
-		// server.updateCommandHandlers("helloWorld", printHelloWorld); // add a command handler to the API server - you can add as many as you want - you can also add methods.
+		server.updateCommandHandlers("helloWorld", printHelloWorld); // add a command handler to the API server - you can add as many as you want - you can also add methods.
 		server.begin();
 		log_d("[SETUP]: Starting API Server");
 		break;
