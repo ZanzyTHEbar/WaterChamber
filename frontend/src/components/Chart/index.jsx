@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 //import Highcharts from "highcharts/highmaps";
 import React from "react";
 
+var data = {};
+
 class Chart extends React.Component {
     constructor(props) {
         super(props);
-
+        data = this.props.data;
         this.state = {
             // To avoid unnecessary update keep all options in the state.
             chartOptions: {
@@ -22,12 +23,11 @@ class Chart extends React.Component {
                 },
                 yAxis: {
                     title: { text: this.props.yAxis.title.text },
-                    //title: { text: 'Temperature (Fahrenheit)' }
                 },
                 credits: { enabled: false },
                 series: [{
                     showInLegend: false,
-                    data: []
+                    data: [],
                 }],
                 plotOptions: {
                     line: {
@@ -46,25 +46,37 @@ class Chart extends React.Component {
             },
             hoverData: null,
         };
+    }
 
-        setInterval(function () {
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    const x = new Date().getTime(),
-                        y = parseFloat(this.responseText);
-                    console.log(this.responseText);
-                    console.log("Testing");
-                    if (this.state.chartOptions.series[0].data.length > 40) {
-                        this.state.chartOptions.series[0].addPoint([x, y], true, true, true);
-                    } else {
-                        this.state.chartOptions.series[0].addPoint([x, y], true, false, true);
-                    }
-                }
-            };
-            xhttp.open("GET", "http://water_chamber.local/api/v1/json/command/data", true);
-            xhttp.send();
-        }, 3000);
+    afterChartCreated = (chart) => {
+        // Highcharts creates a separate chart instance during export
+        if (!chart.options.chart.forExport) {
+            this.internalChart = chart;
+        }
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(() => this.updateSeries(), 3000);
+    }
+
+    updateSeries = () => {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", this.props.data_url, true);
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState === 4 && xhttp.status === 200) {
+                let json_obj = JSON.parse(xhttp.responseText);
+                console.log(json_obj);
+                data = json_obj;
+            }
+            else {
+                console.log(xhttp.statusText);
+            }
+        };
+        xhttp.onerror = function () {
+            console.log(xhttp.statusText);
+        };
+        xhttp.send();
+        this.internalChart.series[0].addPoint([(new Date()).getTime(), data.humidity_temp_dht]);
     }
 
     setHoverData = (e) => {
@@ -72,31 +84,8 @@ class Chart extends React.Component {
         this.setState({ hoverData: e.target.category });
     };
 
-    updateSeries = () => {
-        // The chart is updated only with new options.
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                const x = new Date().getTime(),
-                    y = parseFloat(this.responseText);
-                console.log(this.responseText);
-                console.log("Testing");
-                if (this.state.chartOptions.series[0].data.length > 40) {
-                    this.state.chartOptions.series[0].addPoint([x, y], true, true, true);
-                } else {
-                    this.state.chartOptions.series[0].addPoint([x, y], true, false, true);
-                }
-            }
-        };
-        xhttp.open("GET", "http://water_chamber.local/api/v1/json/command/data", true);
-        xhttp.send();
-        console.log("Updating");
-    };
-
     render() {
-
         const { chartOptions, hoverData } = this.state;
-
         return (
             <div className="card" >
                 <HighchartsReact
@@ -106,11 +95,9 @@ class Chart extends React.Component {
                     immutable={false}
                     updateArgs={[true, true, true]}
                     containerProps={{ className: "chartContainer" }}
+                    callback={this.afterChartCreated}
                 />
                 <h3>Hovering over {hoverData}</h3>
-                <button onClick={this.updateSeries.bind(this)}>
-                    Update Series
-                </button>
             </div>
         );
     }

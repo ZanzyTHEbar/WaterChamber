@@ -1,11 +1,11 @@
 [package]
-name = "outlook_knight"
+name = "esp32_data_logger"
 version = "0.1.0"
-description = "Microsoft Outlook Calendar"
+description = "Data Logger App for Espressif chips"
 authors = ["DaOfficialWizard"]
 license = "MIT"
-repository = "https://github.com/ZanzyTHEbar/Microsoft_Calendar_Epaper_Display"
-default-run = "outlook_knight"
+repository = "https://github.com/ZanzyTHEbar/ESP32DataLogger"
+default-run = "esp32_data_logger"
 edition = "2021"
 rust-version = "1.57"
 
