@@ -2,63 +2,53 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 //import Highcharts from "highcharts/highmaps";
-import React from "react";
+import { useState } from "react";
 
-var data = {};
+export default function Chart(props) {
+    //console.log("Chart props", props);
 
-class Chart extends React.Component {
-    constructor(props) {
-        super(props);
-        data = this.props.data;
-        this.state = {
-            // To avoid unnecessary update keep all options in the state.
-            chartOptions: {
-                title: { text: this.props.title },
-                accessibility: {
-                    enabled: false,
-                },
-                xAxis: {
-                    type: 'datetime',
-                    dateTimeLabelFormats: { second: '%H:%M:%S' },
-                },
-                yAxis: {
-                    title: { text: this.props.yAxis.title.text },
-                },
-                credits: { enabled: false },
-                series: [{
-                    showInLegend: false,
-                    data: [],
-                }],
-                plotOptions: {
-                    line: {
-                        animation: false,
-                        dataLabels: { enabled: true }
-                    },
-                    series: {
-                        color: this.props.line.color,
-                        point: {
-                            events: {
-                                mouseOver: this.setHoverData.bind(this),
-                            },
-                        },
+    const [hoverData, setHoverData] = useState("");
+    const [chartOptions, setChartOptions] = useState({
+        title: { text: props.title },
+        accessibility: {
+            enabled: false,
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { second: '%H:%M:%S' },
+        },
+        yAxis: {
+            title: { text: props.yAxis },
+        },
+        credits: { enabled: false },
+        series: [{
+            showInLegend: false,
+            data: [],
+        }],
+        plotOptions: {
+            line: {
+                animation: false,
+                dataLabels: { enabled: true }
+            },
+            series: {
+                color: props.lineColor,
+                point: {
+                    events: {
+                        mouseOver: (e) => { setHoverData(e.target.category); },
                     },
                 },
             },
-            hoverData: null,
-        };
-    }
+        },
+    });
 
-    afterChartCreated = (chart) => {
-        // Highcharts creates a separate chart instance during export
-        if (!chart.options.chart.forExport) {
-            this.internalChart = chart;
-        }
-    }
+    const [chartData, setChartData] = useState({
+        chartData: props.data,
+    });
 
-    componentDidMount() {
+    /* componentDidMount() {
         this.interval = setInterval(() => this.updateSeries(), 3000);
     }
-
+    
     updateSeries = () => {
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", this.props.data_url, true);
@@ -77,30 +67,20 @@ class Chart extends React.Component {
         };
         xhttp.send();
         this.internalChart.series[0].addPoint([(new Date()).getTime(), data.humidity_temp_dht]);
-    }
+    } */
 
-    setHoverData = (e) => {
-        // The chart is not updated because `chartOptions` has not changed.
-        this.setState({ hoverData: e.target.category });
-    };
-
-    render() {
-        const { chartOptions, hoverData } = this.state;
-        return (
-            <div className="card" >
-                <HighchartsReact
-                    highcharts={Highcharts}
-                    options={chartOptions}
-                    allowChartUpdate={true}
-                    immutable={false}
-                    updateArgs={[true, true, true]}
-                    containerProps={{ className: "chartContainer" }}
-                    callback={this.afterChartCreated}
-                />
-                <h3>Hovering over {hoverData}</h3>
-            </div>
-        );
-    }
+    return (
+        <div className="card" >
+            <HighchartsReact
+                highcharts={Highcharts}
+                options={chartOptions}
+                allowChartUpdate={true}
+                immutable={false}
+                updateArgs={[true, true, true]}
+                containerProps={{ className: "chartContainer" }}
+                ref={props.chartRef}
+            />
+            <h3>Hovering over {hoverData}</h3>
+        </div>
+    );
 }
-
-export default Chart;

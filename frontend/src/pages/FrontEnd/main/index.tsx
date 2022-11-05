@@ -1,95 +1,42 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import Chart from "@components/Chart";
 import Header from "@components/Header";
-import Sidebar from "@components/Sidebar";
+import getData from "@src/API/getData";
 import * as React from "react";
+import type Highcharts from "highcharts-react-official";
+
 /* import styles from "./index.module.scss"; */
 
-const chartOptions = {
-    tempChart: {
-        title: "Temperature",
-        data_url:
-            "http://waterchamber.local/api/v1/builtin/command/json?type=data",
-        yAxis: {
-            title: {
-                text: "Temperature (°C)",
-            },
-        },
-        line: {
-            color: "#059e8a",
-        },
-        data: {
-            id: "",
-            timestamp: "",
-            max_temp: 0,
-            num_temp_sensors: 0,
-            water_level_liters: 0,
-            water_level_percent: 0,
-            humidity_dht: 0,
-            humidity_temp_dht: 0,
-            temp_sensors: [],
-        },
-    },
-    humiChart: {
-        title: "Humidity",
-        data_url:
-            "http://waterchamber.local/api/v1/builtin/command/json?type=data",
-        yAxis: {
-            title: {
-                text: "Humidity (%)",
-            },
-        },
-        line: {
-            color: "#18009c",
-        },
-        data: {
-            id: "",
-            timestamp: "",
-            max_temp: 0,
-            num_temp_sensors: 0,
-            water_level_liters: 0,
-            water_level_percent: 0,
-            humidity_dht: 0,
-            humidity_temp_dht: 0,
-            temp_sensors: [],
-        },
-    },
-    humiTempChart: {
-        title: "Humidity Temperature",
-        data_url:
-            "http://waterchamber.local/api/v1/builtin/command/json?type=data",
-        yAxis: {
-            title: {
-                text: "Temperature (°C)",
-            },
-        },
-        line: {
-            color: "#059e8a",
-        },
-        data: {
-            id: "",
-            timestamp: "",
-            max_temp: 0,
-            num_temp_sensors: 0,
-            water_level_liters: 0,
-            water_level_percent: 0,
-            humidity_dht: 0,
-            humidity_temp_dht: 0,
-            temp_sensors: [],
-        },
-    },
-};
+const chartData = {};
+
+const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
 
 export function Main() {
-    const { tempChart, humiChart, humiTempChart } = chartOptions;
-    const [sidebarState, setSidebarState] = React.useState(false);
+    const chartRef = React.useRef<Highcharts.RefObject>(null);
+    const chartRef2 = React.useRef<Highcharts.RefObject>(null);
+    const chartRef3 = React.useRef<Highcharts.RefObject>(null);
 
+    React.useEffect(() => {
+        const interval = setInterval(async () => {
+            if (!chartRef || !chartRef.current) {
+                return;
+            }
+            const data = await getData(url, false);
+            
+            const chart = chartRef.current.chart;
+            chart.series[0].addPoint([new Date().getTime(), data.humidity_dht]);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json object
+
+    /*const [sidebarState, setSidebarState] = React.useState(false);
     const onSetSidebarOpen = () => {
         setSidebarState(!sidebarState);
-    };
+    }; */
 
     const Main = () => (
         <div
@@ -99,14 +46,14 @@ export function Main() {
             }}
         >
             <Header name="Water Chamber" />
-            <div className="flex flex-row flex-grow">
+            {/* <div className="flex flex-row flex-grow">
                 <Sidebar name="Water Chamber"/>
             </div>
             <div className="flex flex-row flex-grow p-10 text-center">
                 <button className="bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5">
                     Button
                 </button>
-            </div>
+            </div> */}
             <div
                 className="chartContainer"
                 style={{
@@ -119,9 +66,27 @@ export function Main() {
                         overflow: "auto",
                     }}
                 >
-                    <Chart {...tempChart} />
-                    <Chart {...humiChart} />
-                    <Chart {...humiTempChart} />
+                    <Chart
+                        title="Temperature"
+                        yAxis="Temperature (°C)"
+                        lineColor="#059e8a"
+                        data={[]}
+                        chartRef={chartRef}
+                    />
+                    <Chart
+                        title="Humidity"
+                        yAxis="Humidity (%)"
+                        lineColor="#18009c"
+                        data={[]}
+                        chartRef={chartRef2}
+                    />
+                    <Chart
+                        title="Humidity Temperature"
+                        yAxis="Humidity (°C)"
+                        lineColor="#059e8a"
+                        data={[]}
+                        chartRef={chartRef3}
+                    />
                 </div>
             </div>
         </div>
