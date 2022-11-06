@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 
 // TODO: Add a function to onClick button that saves the settings to a json file
 
+// TODO: Add setting to choose the number of charts to display
+
 export default function Settings() {
     return (
         <div>
