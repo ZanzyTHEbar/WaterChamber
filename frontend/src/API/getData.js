@@ -2,7 +2,7 @@ export default async function getData(url, sendTime = true) {
     try {
         let response = {};
         if (sendTime) {
-            response = await fetch(url + "?" + (new Date()).getTime() / 1000);
+            response = await fetch(url + "?" + new Date().getTime() / 1000);
             if (!response.ok) {
                 throw new Error("Network response was not ok.");
             }

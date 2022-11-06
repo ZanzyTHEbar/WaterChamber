@@ -4,6 +4,10 @@ import { SidebarData } from "@components/SidebarData";
 import Tooltip from "@components/Tooltip";
 import { Link } from "react-router-dom";
 
+// TODO: Move settings to be in the middle of the page
+
+// TODO: Add a function to onClick button that saves the settings to a json file
+
 export default function Settings() {
     return (
         <div>
@@ -57,11 +61,11 @@ export default function Settings() {
                         {SidebarData.map((item, index) => (
                             <li
                                 key={index}
-                                className={`${item.cName} px-2 py-1 rounded-sm`}
+                                className={`${item.cName} flow-root px-2 py-1 rounded-sm`}
                             >
                                 <Tooltip tooltip={item.tooltip}>
                                     <label
-                                        className="flex items-center space-x-2 p-2 mr-8 rounded-sm whitespace-nowrap"
+                                        className="float-left flex justify-start space-x-2 p-1 mr-8 rounded-sm whitespace-nowrap"
                                         htmlFor={item.id}
                                     >
                                         <span className="text-gray-700 dark:text-gray-600">
@@ -72,14 +76,16 @@ export default function Settings() {
                                         </span>
                                     </label>
                                 </Tooltip>
-                                <input
-                                    title=""
-                                    type="text"
-                                    id={item.id}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder={item.title}
-                                    required
-                                />
+                                <div className="float-right">
+                                    <input
+                                        title=""
+                                        type="text"
+                                        id={item.id}
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder={item.title}
+                                        required
+                                    />
+                                </div>
                             </li>
                         ))}
                         <button className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner">

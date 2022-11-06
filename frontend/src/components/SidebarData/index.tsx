@@ -42,7 +42,7 @@ export const SidebarData = [
         tooltip: "Graph Line Color",
     },
     {
-        title: "Graph Number",
+        title: "Graph ID",
         icon: <FaIcons.FaHashtag />,
         cName: "nav-text",
         id: "graph_number",
