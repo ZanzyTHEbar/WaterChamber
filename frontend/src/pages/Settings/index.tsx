@@ -1,52 +1,90 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+//import { useState } from "react";
+import { SidebarData } from "@components/SidebarData";
+import Tooltip from "@components/Tooltip";
+import { Link } from "react-router-dom";
 
-export default function Sidebar(props) {
+export default function Settings() {
     return (
         <div>
-            <aside className="w-64" aria-label="Sidebar">
+            <aside
+                className="w-100 h-100vh overflow-y-auto"
+                aria-label="Sidebar"
+            >
                 <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-300 z-40">
-                    <a href="#" className="flex items-center pl-2.5 mb-5">
-                        <img
-                            src="/images/icons/Square30x30Logo.png"
-                            className="mr-3 h-6 sm:h-9"
-                            alt="Logo"
-                        />
-                        <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                            {props.name}
-                        </span>
-                    </a>
-                    <ul className="space-y-2">
-                        <header
-                            style={{
-                                color: "#059e8a",
-                            }}
-                        >
-                            Settings
-                        </header>
-                        <li className="px-2 py-1 rounded-sm dark:hover:bg-gray-400">
-                            <a
-                                href="#"
-                                className="flex items-center space-x-2 p-2 rounded-sm dark:hover:bg-gray-400"
+                    <div className="container px-1 flex items-center justify-between">
+                        <a href="#" className="flex items-center pl-2.5">
+                            <img
+                                src="/images/icons/Square30x30Logo.png"
+                                className="mr-3 h-6 sm:h-9"
+                                alt="Logo"
+                            />
+                            <span className="mx-5 self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                                <header
+                                    style={{
+                                        color: "#059e8a",
+                                    }}
+                                >
+                                    Settings
+                                </header>
+                            </span>
+                        </a>
+                        <Link to="#" className="menu-bars">
+                            <button
+                                type="button"
+                                className="ml-auto dark:bg-gray-300 text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-400 p-1 hover:bg-gray-200 inline-flex h-6 w-6 dark:bg-gray-300 dark:text-gray-600 dark:hover:bg-gray-400"
+                                data-collapse-toggle="dropdown-cta"
+                                aria-label="Close"
                             >
-                                <span className="text-gray-600 dark:text-gray-500">
-                                    <svg
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
+                                <span className="sr-only">Close</span>
+                                <svg
+                                    aria-hidden="true"
+                                    className="w-4 h-4"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                        </Link>
+                    </div>
+                    <ul className="space-y-2">
+                        {SidebarData.map((item, index) => (
+                            <li
+                                key={index}
+                                className={`${item.cName} px-2 py-1 rounded-sm`}
+                            >
+                                <Tooltip tooltip={item.tooltip}>
+                                    <label
+                                        className="flex items-center space-x-2 p-2 mr-8 rounded-sm whitespace-nowrap"
+                                        htmlFor={item.id}
                                     >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M9 5l7 7-7 7"
-                                        />
-                                    </svg>
-                                </span>
-                            </a>
-                        </li>
+                                        <span className="text-gray-700 dark:text-gray-600">
+                                            {item.icon}
+                                        </span>
+                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-500">
+                                            {item.title}
+                                        </span>
+                                    </label>
+                                </Tooltip>
+                                <input
+                                    title=""
+                                    type="text"
+                                    id={item.id}
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder={item.title}
+                                    required
+                                />
+                            </li>
+                        ))}
+                        <button className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner">
+                            Save
+                        </button>
                     </ul>
                     <div
                         id="dropdown-cta"
@@ -72,9 +110,9 @@ export default function Sidebar(props) {
                                     xmlns="http://www.w3.org/2000/svg"
                                 >
                                     <path
-                                        fill-rule="evenodd"
+                                        fillRule="evenodd"
                                         d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
