@@ -4,27 +4,25 @@
 import Chart from "@components/Chart";
 import Header from "@components/Header";
 import getData from "@src/API/getData";
-import * as React from "react";
+import { useRef, useEffect } from "react";
 import type Highcharts from "highcharts-react-official";
 
 /* import styles from "./index.module.scss"; */
 
-const chartData = {};
-
 const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
 
 export function Main() {
-    const chartRef = React.useRef<Highcharts.RefObject>(null);
-    const chartRef2 = React.useRef<Highcharts.RefObject>(null);
-    const chartRef3 = React.useRef<Highcharts.RefObject>(null);
+    const chartRef = useRef<Highcharts.RefObject>(null);
+    const chartRef2 = useRef<Highcharts.RefObject>(null);
+    const chartRef3 = useRef<Highcharts.RefObject>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(async () => {
             if (!chartRef || !chartRef.current) {
                 return;
             }
             const data = await getData(url, false);
-            
+
             const chart = chartRef.current.chart;
             chart.series[0].addPoint([new Date().getTime(), data.humidity_dht]);
         }, 3000);
@@ -33,7 +31,7 @@ export function Main() {
 
     //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json object
 
-    /*const [sidebarState, setSidebarState] = React.useState(false);
+    /*const [sidebarState, setSidebarState] = useState(false);
     const onSetSidebarOpen = () => {
         setSidebarState(!sidebarState);
     }; */
@@ -70,27 +68,23 @@ export function Main() {
                         title="Temperature"
                         yAxis="Temperature (°C)"
                         lineColor="#059e8a"
-                        data={[]}
                         chartRef={chartRef}
                     />
                     <Chart
                         title="Humidity"
                         yAxis="Humidity (%)"
                         lineColor="#18009c"
-                        data={[]}
                         chartRef={chartRef2}
                     />
                     <Chart
                         title="Humidity Temperature"
                         yAxis="Humidity (°C)"
                         lineColor="#059e8a"
-                        data={[]}
                         chartRef={chartRef3}
                     />
                 </div>
             </div>
         </div>
     );
-
     return <Main />;
 }

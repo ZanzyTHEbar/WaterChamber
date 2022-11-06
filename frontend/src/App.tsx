@@ -1,11 +1,10 @@
-import MainWindow from "@pages/FrontEnd";
-/* import { appWindow } from "@tauri-apps/api/window";
-await appWindow.setDecorations(false); */
+import { Main } from "@pages/Home";
+//import { appWindow } from "@tauri-apps/api/window";
 
 function App() {
     return (
         <div className="App">
-            <MainWindow />
+            <Main />
         </div>
     );
 }
