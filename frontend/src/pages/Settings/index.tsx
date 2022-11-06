@@ -21,11 +21,11 @@ export default function Settings() {
                 </header>
             </div>
             <div>
-                <ul className="flow-root space-y-2 items-center justify-between flex-col">
+                <ul className="flow-root space-y-2 items-center content-center justify-center flex-col">
                     {SidebarData.map((item, index) => (
                         <li
                             key={index}
-                            className={`${item.cName} items-center justify-around mr-32 flex-row rounded-sm`}
+                            className={`${item.cName} pt-2.5 pr-2.5 rounded self-center items-center content-center justify-center mr-32 flex-row`}
                         >
                             <Tooltip tooltip={item.tooltip}>
                                 <label
