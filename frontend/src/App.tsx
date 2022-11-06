@@ -1,10 +1,10 @@
-import Home from "@pages/Home";
+import AppRoutes from "@src/routes/app";
 //import { appWindow } from "@tauri-apps/api/window";
 
 function App() {
     return (
         <div className="App">
-            <Home />
+            <AppRoutes />
         </div>
     );
 }

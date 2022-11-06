@@ -24,7 +24,7 @@ export default function Charts() {
         return () => clearInterval(interval);
     }, []);
 
-    //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json objec
+    //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json object
     return (
         <div
             className="h-fit flex flex-col"
