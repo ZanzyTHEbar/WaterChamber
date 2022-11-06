@@ -22,22 +22,19 @@
     }
     .nav-menu {
         background: none;
-        width: 50%;
         height: 100vh;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
         transition: 850ms;
-        z-index: 20;
         top: 1.85rem;
-        left: -100%;
         opacity: 90%;
+        z-index: 20;
         overflow-y: auto;
-    }
-
-    .nav-menu.active {
-        left: 0;
-        transition: 350ms;
     }
 
     .nav-text {

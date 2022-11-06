@@ -4,13 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import Settings from "@pages/Settings";
 import { useState } from "react";
+import Modal from "@components/Modal";
 
 export default function Header(props) {
     const [showSettings, setShowSettings] = useState(false);
-
-    const toggleSettings = () => {
-        setShowSettings(!showSettings);
-    };
 
     return (
         <>
@@ -23,7 +20,7 @@ export default function Header(props) {
                 <div className="navbar">
                     <Link to="#" className="menubars">
                         <button
-                            onClick={toggleSettings}
+                            onClick={() => setShowSettings(!showSettings)}
                             className="ml-4 p-1 hover:bg-gray-200 border rounded-full py-3 px-4 mr-5 shadow-md hover:shadow-xl focus:bg-gray-100 transition duration-200 ease-in focus:shadow-inner"
                         >
                             <FontAwesomeIcon icon={faGear} />
@@ -38,14 +35,13 @@ export default function Header(props) {
                 </h2>
                 <img src={logo} alt="logo" className="ml-5 mr-0 w-15 h-12" />
             </header>
-            <div
-                className={
-                    showSettings
-                        ? "nav-menu active overflow-y-auto"
-                        : "nav-menu overflow-y-auto"
-                }
-            >
-                <Settings />
+            <div className="nav-menu">
+                <Modal
+                    isVisible={showSettings}
+                    onClose={() => setShowSettings(false)}
+                    content={<Settings />}
+                    width="600"
+                />
             </div>
         </>
     );

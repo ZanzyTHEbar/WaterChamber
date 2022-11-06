@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import React from "react";
 import type Highcharts from "highcharts-react-official";
 
-// TODO: Map over settings json file to create multiple charts with different settings
+//! TODO: Map over settings json file to create multiple charts with different settings
 
 const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
 
