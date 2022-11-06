@@ -3,23 +3,33 @@
 import { SidebarData } from "@components/SidebarData";
 import Tooltip from "@components/Tooltip";
 
-//! TODO: Move settings to be in the middle of the page
 //! TODO: Add a function to onClick button that saves the settings to a json file
+
 //! TODO: Add setting to choose the number of charts to display
 
 export default function Settings() {
     return (
         <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-300 z-40">
+            <div className="flex items-center justify-center">
+                <header
+                    style={{
+                        color: "#059e8a",
+                    }}
+                    className="text-2xl font-bold"
+                >
+                    Settings
+                </header>
+            </div>
             <div>
-                <ul className="space-y-2">
+                <ul className="flow-root space-y-2 items-center justify-between flex-col">
                     {SidebarData.map((item, index) => (
                         <li
                             key={index}
-                            className={`${item.cName} flow-root px-2 py-1 rounded-sm`}
+                            className={`${item.cName} items-center justify-around mr-32 flex-row rounded-sm`}
                         >
                             <Tooltip tooltip={item.tooltip}>
                                 <label
-                                    className="float-left flex justify-start space-x-2 p-1 mr-8 rounded-sm whitespace-nowrap"
+                                    className="float-left space-x-2 rounded-sm whitespace-nowrap"
                                     htmlFor={item.id}
                                 >
                                     <span className="text-gray-700 dark:text-gray-600">

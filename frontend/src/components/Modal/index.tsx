@@ -3,26 +3,9 @@ import React from "react";
 export default function Modal(props) {
     if (!props.isVisible) return null;
     return (
-        <div className="fixed pt-8 mt-7 inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
-            <div className={`w-[${props.width}px]`}>
+        <div className="fixed pt-8 mt-7 inset-0 bg-black bg-opacity-25 backdrop-blur-xl flex justify-center items-center">
+            <div className={`w-[${props.width}px] flex flex-col`}>
                 <div className="container px-1 flex items-center justify-between">
-                    <div className="flex items-center pl-2.5">
-                        <img
-                            src="/images/icons/Square30x30Logo.png"
-                            className="mr-3 h-6 sm:h-9"
-                            alt="Logo"
-                        />
-                        <span className="mx-5 text-xl font-semibold whitespace-nowrap dark:text-white">
-                            <header
-                                style={{
-                                    color: "#059e8a",
-                                }}
-                                className="text-2xl font-bold pl-32 ml-4"
-                            >
-                                Settings
-                            </header>
-                        </span>
-                    </div>
                     <button
                         type="button"
                         className="ml-auto place-self-end text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-400 p-1 hover:bg-gray-200 inline-flex h-6 w-6 dark:bg-gray-300 dark:text-gray-600 dark:hover:bg-gray-400"
