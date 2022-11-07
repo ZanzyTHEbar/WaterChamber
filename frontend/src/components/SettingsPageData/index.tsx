@@ -42,10 +42,10 @@ export const SidebarData = [
         tooltip: "Graph Line Color",
     },
     {
-        title: "Graph ID",
-        icon: <FaIcons.FaHashtag />,
+        title: "Object ID",
+        icon: <FaIcons.FaIdBadge />,
         cName: "nav-text",
-        id: "graph_number",
-        tooltip: "The object member name of from the JSON data",
+        id: "object_id",
+        tooltip: "The object member name from the JSON data",
     },
 ];
