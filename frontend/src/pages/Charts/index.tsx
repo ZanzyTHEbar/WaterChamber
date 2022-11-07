@@ -62,27 +62,45 @@ export default function Charts() {
                         overflow: "auto",
                     }}
                 >
-                    <ul className="flow-root space-y-2 items-center content-center justify-center flex-col">
-                        <div>
-                            {ChartData.map((item, index) => (
-                                <li key={index} className={item.cName}>
-                                    {item.interval === 0
-                                        ? (item.interval = 3000)
-                                        : null}
-                                    <Chart
-                                        title={item.title}
-                                        yAxis={item.yAxis}
-                                        lineColor={item.lineColor}
-                                        data={fetchFromObject(
-                                            chart.data,
-                                            item.chart_id
-                                        )}
-                                        interval={item.interval}
-                                    />
-                                </li>
-                            ))}
+                    {ChartData.length <= 1 ? (
+                        <div
+                            className="flex items-center justify-center"
+                            style={{
+                                height: "100%",
+                            }}
+                        >
+                            <header
+                                style={{
+                                    color: "#059e8a",
+                                }}
+                                className="text-2xl font-bold"
+                            >
+                                No charts to display
+                            </header>
                         </div>
-                    </ul>
+                    ) : (
+                        <ul className="flow-root space-y-2 items-center content-center justify-center flex-col">
+                            <div>
+                                {ChartData.map((item, index) => (
+                                    <li key={index} className={item.cName}>
+                                        {item.interval === 0
+                                            ? (item.interval = 3000)
+                                            : null}
+                                        <Chart
+                                            title={item.title}
+                                            yAxis={item.y_axis_title}
+                                            lineColor={item.line_color}
+                                            data={fetchFromObject(
+                                                chart.data,
+                                                item.object_id
+                                            )}
+                                            interval={item.interval}
+                                        />
+                                    </li>
+                                ))}
+                            </div>
+                        </ul>
+                    )}
                 </div>
             </div>
         </div>

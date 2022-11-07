@@ -1,12 +1,12 @@
 export const ChartData = [
     {
-        ip: "http://waterchamber.local",
-        endpoint: "/api/v1/builtin/command/json?type=data",
-        title: "Temperature",
-        yAxis: "Temperature (°C)",
-        lineColor: "#000000",
+        ip: "",
+        endpoint: "",
+        title: "",
+        y_axis_title: "",
+        line_color: "",
         interval: 3000,
-        chart_id: "humidity_temp_dht",
+        object_id: "",
         cName: "graphContainer",
     },
 ];

@@ -1,13 +1,55 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-//import { useState } from "react";
-import { SidebarData } from "@components/SettingsPageData";
+import "antd/dist/antd.css";
+import { ChartData } from "@components/ChartData";
+import Input from "@components/SettingsInputs";
+import { SettingsPageData } from "@components/SettingsPageData";
 import Tooltip from "@components/Tooltip";
+//import { Button, Col, Form, Row, Select, Typography } from "antd";
+import { useState } from "react";
+//import { Color } from "highcharts";
 
-//! TODO: Add a function to onClick button that saves the settings to a json file
+// TODO: Add a color picker for the chart line color
 
-//! TODO: Add setting to choose the number of charts to display
+// TODO: Add a function to onClick button that saves the settings
 
 export default function Settings() {
+    const settingsData = {
+        ip: "",
+        endpoint: "",
+        title: "",
+        y_axis_title: "",
+        line_color: "",
+        interval: 3000,
+        object_id: "",
+        cName: "graphContainer",
+    };
+    const [inputState, setInputState] = useState(settingsData);
+
+    const handleChange = (event, id) => {
+        setInputState({ ...inputState, [id]: event.target.value });
+    };
+
+    const handleSave = () => {
+        //console.log(inputState);
+        // add  the inputState object to the ChartData array
+        ChartData.push(inputState);
+    };
+
+    const handleReset = () => {
+        setInputState(settingsData);
+    };
+
+    const handleDeleteAll = () => {
+        while (ChartData.length) {
+            ChartData.pop();
+        }
+        ChartData.push(settingsData);
+    };
+
+    const handleDelete = () => {
+        ChartData.pop();
+    };
+
     return (
         <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-300 z-40">
             <div className="flex items-center justify-center">
@@ -22,9 +64,9 @@ export default function Settings() {
             </div>
             <div>
                 <ul className="flow-root space-y-2 items-center content-center justify-center flex-col">
-                    {SidebarData.map((item, index) => (
+                    {SettingsPageData.map((item) => (
                         <li
-                            key={index}
+                            key={item.id}
                             className={`${item.cName} pt-2.5 pr-2.5 rounded-xl self-center items-stretch content-center justify-center mr-32 flex-row`}
                         >
                             <Tooltip tooltip={item.tooltip}>
@@ -41,19 +83,42 @@ export default function Settings() {
                                 </label>
                             </Tooltip>
                             <div className="float-right">
-                                <input
-                                    title=""
+                                <Input
+                                    key={item.id}
                                     type="text"
                                     id={item.id}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder={item.title}
-                                    required
+                                    placeholder={item.placeholder}
+                                    value={inputState[item.id] || ""}
+                                    setValue={(event) =>
+                                        handleChange(event, item.id)
+                                    }
                                 />
                             </div>
                         </li>
                     ))}
-                    <button className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner">
+                    <button
+                        onClick={handleSave}
+                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                    >
                         Add Chart
+                    </button>
+                    <button
+                        onClick={handleDeleteAll}
+                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                    >
+                        Clear All
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                    >
+                        Delete Last
+                    </button>
+                    <button
+                        onClick={handleReset}
+                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                    >
+                        Reset Form
                     </button>
                 </ul>
             </div>
