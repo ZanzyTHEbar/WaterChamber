@@ -55,7 +55,7 @@ export default function Charts() {
                                         title={item.title}
                                         yAxis={item.yAxis}
                                         lineColor={item.lineColor}
-                                        data={chart.data}
+                                        data={chart.data[`${item.chart_id}`]}
                                         interval={item.interval}
                                     />
                                 </li>
