@@ -62,7 +62,7 @@ export default function Charts() {
                         overflow: "auto",
                     }}
                 >
-                    {ChartData.length <= 1 ? (
+                    {ChartData.length === 0 ? (
                         <div
                             className="flex items-center justify-center"
                             style={{

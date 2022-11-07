@@ -11,8 +11,20 @@
     .card {
         background-color: theme("colors.white");
         border-radius: theme("borderRadius.lg");
-        padding: theme("spacing.6");
-        box-shadow: theme("boxShadow.xl");
+        padding-left: theme("spacing.6");
+        padding-right: theme("spacing.6");
+        padding-bottom: theme("spacing.6");
+        padding-top: theme("spacing.8");
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        margin-top: 2rem;
+        
+    }
+
+    .chart-div {
+        padding-left: theme("spacing.6");
+        padding-right: theme("spacing.6");
+        padding-bottom: theme("spacing.6");
+        padding-top: theme("spacing.8");
     }
 
     .menu-bars {
