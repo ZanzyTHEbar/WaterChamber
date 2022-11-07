@@ -1,7 +1,7 @@
 export const ChartData = [
     {
-        ip: "",
-        endpoint: "",
+        ip: "http://waterchamber.local",
+        endpoint: "/api/v1/builtin/command/json?type=data",
         title: "Temperature",
         yAxis: "Temperature (°C)",
         lineColor: "#000000",

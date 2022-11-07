@@ -1,4 +1,4 @@
-export default async function getData(url, sendTime = true) {
+export default async function getData(url, sendTime = false) {
     try {
         let response = {};
         if (sendTime) {

@@ -3,10 +3,6 @@ import { ChartData } from "@components/ChartData";
 import getData from "@src/API/getData";
 import { useState, useEffect } from "react";
 
-//! TODO: Map over settings json file to create multiple charts with different settings
-
-const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
-
 // recursive function to get data from API
 // handles nested objects
 function fetchFromObject(obj, prop) {
@@ -30,15 +26,20 @@ export default function Charts() {
     });
 
     const updateData = () => {
-        getData(url, false).then((data) => {
-            setChart({ data: data });
+        ChartData.forEach((chart) => {
+            getData(chart.ip + chart.endpoint).then((res) => {
+                //console.log(res);
+                setChart({
+                    data: { ...res },
+                });
+            });
         });
     };
 
     useEffect(() => {
         const interval = setInterval(() => {
             updateData();
-        }, 3000);
+        }, ChartData[0].interval);
         return () => clearInterval(interval);
     }, []);
 
