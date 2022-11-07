@@ -1,32 +1,31 @@
 import Chart from "@components/Chart";
+import { ChartData } from "@components/ChartData";
 import getData from "@src/API/getData";
-import { useRef, useEffect } from "react";
-import React from "react";
-import type Highcharts from "highcharts-react-official";
+import { useState, useEffect } from "react";
 
 //! TODO: Map over settings json file to create multiple charts with different settings
 
 const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
 
 export default function Charts() {
-    const chartRef = useRef<Highcharts.RefObject>(null);
-    const chartRef2 = useRef<Highcharts.RefObject>(null);
-    const chartRef3 = useRef<Highcharts.RefObject>(null);
+    //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json object
+    const [chart, setChart] = useState({
+        data: 0,
+    });
+
+    const updateData = () => {
+        getData(url, false).then((data) => {
+            setChart({ data: data });
+        });
+    };
 
     useEffect(() => {
-        const interval = setInterval(async () => {
-            if (!chartRef || !chartRef.current) {
-                return;
-            }
-            const data = await getData(url, false);
-
-            const chart = chartRef.current.chart;
-            chart.series[0].addPoint([new Date().getTime(), data.humidity_dht]);
+        const interval = setInterval(() => {
+            updateData();
         }, 3000);
         return () => clearInterval(interval);
     }, []);
 
-    //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json object
     return (
         <div
             className="h-fit flex flex-col"
@@ -46,24 +45,24 @@ export default function Charts() {
                         overflow: "auto",
                     }}
                 >
-                    <Chart
-                        title="Temperature"
-                        yAxis="Temperature (°C)"
-                        lineColor="#059e8a"
-                        chartRef={chartRef}
-                    />
-                    <Chart
-                        title="Humidity"
-                        yAxis="Humidity (%)"
-                        lineColor="#18009c"
-                        chartRef={chartRef2}
-                    />
-                    <Chart
-                        title="Humidity Temperature"
-                        yAxis="Humidity (°C)"
-                        lineColor="#059e8a"
-                        chartRef={chartRef3}
-                    />
+                    <ul className="flow-root space-y-2 items-center content-center justify-center flex-col">
+                        <div>
+                            {ChartData.map((item, index) => (
+                                <li key={index} className={item.cName}>
+                                    {item.interval === 0
+                                        ? (item.interval = 3000)
+                                        : null}
+                                    <Chart
+                                        title={item.title}
+                                        yAxis={item.yAxis}
+                                        lineColor={item.lineColor}
+                                        data={chart.data}
+                                        interval={item.interval}
+                                    />
+                                </li>
+                            ))}
+                        </div>
+                    </ul>
                 </div>
             </div>
         </div>

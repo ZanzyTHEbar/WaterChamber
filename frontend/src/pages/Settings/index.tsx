@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 //import { useState } from "react";
-import { SidebarData } from "@components/SidebarData";
+import { SidebarData } from "@components/SettingsPageData";
 import Tooltip from "@components/Tooltip";
 
 //! TODO: Add a function to onClick button that saves the settings to a json file
@@ -25,7 +25,7 @@ export default function Settings() {
                     {SidebarData.map((item, index) => (
                         <li
                             key={index}
-                            className={`${item.cName} pt-2.5 pr-2.5 rounded self-center items-center content-center justify-center mr-32 flex-row`}
+                            className={`${item.cName} pt-2.5 pr-2.5 rounded-xl self-center items-stretch content-center justify-center mr-32 flex-row`}
                         >
                             <Tooltip tooltip={item.tooltip}>
                                 <label

@@ -48,4 +48,11 @@ export const SidebarData = [
         id: "graph_number",
         tooltip: "Unique Graph Identifier",
     },
+    {
+        title: "Graph Amount",
+        icon: <FaIcons.FaHashtag />,
+        cName: "nav-text",
+        id: "graph_amount",
+        tooltip: "The amount of graphs to display",
+    },
 ];

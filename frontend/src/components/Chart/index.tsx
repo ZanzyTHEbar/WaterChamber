@@ -2,10 +2,12 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 //import Highcharts from "highcharts/highmaps";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import type HighchartsTypes from "highcharts-react-official";
 
 export default function Chart(props) {
     const [hoverData, setHoverData] = useState("");
+    const chartRef = useRef<HighchartsTypes.RefObject>(null);
     const [chartOptions] = useState({
         title: { text: props.title },
         accessibility: {
@@ -43,6 +45,17 @@ export default function Chart(props) {
         },
     });
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!chartRef || !chartRef.current) {
+                return;
+            }
+            const chart = chartRef.current.chart;
+            chart.series[0].addPoint([new Date().getTime(), props.data]);
+        }, props.interval);
+        return () => clearInterval(interval);
+    }, [props.data, props.interval]);
+
     return (
         <div className="card">
             <HighchartsReact
@@ -52,7 +65,7 @@ export default function Chart(props) {
                 immutable={false}
                 updateArgs={[true, true, true]}
                 containerProps={{ className: "chartContainer" }}
-                ref={props.chartRef}
+                ref={chartRef}
             />
             <h3>Hovering over {hoverData}</h3>
         </div>
