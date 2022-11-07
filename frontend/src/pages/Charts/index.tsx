@@ -7,6 +7,23 @@ import { useState, useEffect } from "react";
 
 const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
 
+// recursive function to get data from API
+// handles nested objects
+function fetchFromObject(obj, prop) {
+    if (typeof obj === "undefined") {
+        return false;
+    }
+    const _index = prop.indexOf(".");
+    if (_index > -1) {
+        return fetchFromObject(
+            obj[prop.substring(0, _index)],
+            prop.substr(_index + 1)
+        );
+    }
+
+    return obj[prop];
+}
+
 export default function Charts() {
     const [chart, setChart] = useState({
         data: {},
@@ -55,7 +72,10 @@ export default function Charts() {
                                         title={item.title}
                                         yAxis={item.yAxis}
                                         lineColor={item.lineColor}
-                                        data={chart.data[`${item.chart_id}`]}
+                                        data={fetchFromObject(
+                                            chart.data,
+                                            item.chart_id
+                                        )}
                                         interval={item.interval}
                                     />
                                 </li>

@@ -46,13 +46,6 @@ export const SidebarData = [
         icon: <FaIcons.FaHashtag />,
         cName: "nav-text",
         id: "graph_number",
-        tooltip: "Unique Graph Identifier",
-    },
-    {
-        title: "Graph Amount",
-        icon: <FaIcons.FaHashtag />,
-        cName: "nav-text",
-        id: "graph_amount",
-        tooltip: "The amount of graphs to display",
+        tooltip: "The object member name of from the JSON data",
     },
 ];
