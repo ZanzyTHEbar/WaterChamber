@@ -8,9 +8,8 @@ import { useState, useEffect } from "react";
 const url = "http://waterchamber.local/api/v1/builtin/command/json?type=data";
 
 export default function Charts() {
-    //! TODO: Make this dynamic by mapping over the data - add all the chart params to the json object
     const [chart, setChart] = useState({
-        data: 0,
+        data: {},
     });
 
     const updateData = () => {

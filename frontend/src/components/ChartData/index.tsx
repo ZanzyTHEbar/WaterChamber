@@ -1,5 +1,7 @@
 export const ChartData = [
     {
+        ip: "",
+        endpoint: "",
         title: "Temperature",
         yAxis: "Temperature (°C)",
         lineColor: "#000000",
@@ -9,6 +11,8 @@ export const ChartData = [
         cName: "graphContainer",
     },
     {
+        ip: "",
+        endpoint: "",
         title: "",
         yAxis: "",
         lineColor: "",
