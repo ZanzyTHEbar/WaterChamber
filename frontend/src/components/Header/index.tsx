@@ -39,9 +39,10 @@ export default function Header(props) {
                 <Modal
                     isVisible={showSettings}
                     onClose={() => setShowSettings(false)}
-                    content={<Settings />}
                     width="600"
-                />
+                >
+                    <Settings />
+                </Modal>
             </div>
         </>
     );

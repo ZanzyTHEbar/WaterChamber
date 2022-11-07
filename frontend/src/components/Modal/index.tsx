@@ -12,9 +12,9 @@ export default function Modal(props) {
         <div
             id="wrapper"
             onClick={handleClose}
-            className="fixed pt-8 mt-7 inset-0 bg-black bg-opacity-25 backdrop-blur-xl flex justify-center items-center"
+            className="fixed pt-8 mt-7 inset-0 bg-black bg-opacity-25 backdrop-blur-xl flex justify-center items-center content-center self-center"
         >
-            <div className={`w-[${props.width}px] flex flex-col`}>
+            <div className={`md:w-[${props.width}px] w[90%] mx-auto flex flex-col`}>
                 <div className="container px-1 flex items-center justify-between">
                     <button
                         type="button"
@@ -38,7 +38,7 @@ export default function Modal(props) {
                         </svg>
                     </button>
                 </div>
-                <div className="bg-none p-2 rounded">{props.content}</div>
+                <div className="bg-none p-2 rounded">{props.children}</div>
             </div>
         </div>
     );

@@ -53,7 +53,7 @@ export default function Settings() {
                         </li>
                     ))}
                     <button className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner">
-                        Save
+                        Add Chart
                     </button>
                 </ul>
             </div>
