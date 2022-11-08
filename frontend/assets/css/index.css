@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Ubuntu:500");
-/* @use "sass:math"; */
+
+/* https://www.highcharts.com/docs/chart-design-and-style/style-by-css */
 
 @tailwind base;
 @tailwind components;
@@ -15,9 +16,10 @@
         padding-right: theme("spacing.6");
         padding-bottom: theme("spacing.6");
         padding-top: theme("spacing.8");
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+            rgba(0, 0, 0, 0.23) 0px 6px 6px;
         margin-top: 2rem;
-        
     }
 
     .chart-div {
@@ -68,6 +70,40 @@
 
     .nav-text:hover {
         background-color: theme("colors.blue.400");
+    }
+
+    #button-row {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: right;
+        font-size: 0;
+    }
+
+    #button-row button {
+        background: #eee;
+        transition: background 150ms;
+        border: 1px solid #999;
+        display: inline-block;
+        font-size: 12pt;
+        line-height: 16pt;
+        margin-left: -1px;
+        color: #555;
+    }
+
+    #button-row button:first-child {
+        border-top-left-radius: 0.3em;
+        border-bottom-left-radius: 0.3em;
+    }
+
+    #button-row button:last-child {
+        border-top-right-radius: 0.3em;
+        border-bottom-right-radius: 0.3em;
+    }
+
+    #button-row button:focus,
+    #button-row button:hover {
+        background: #ccc;
+        outline: none;
     }
 }
 

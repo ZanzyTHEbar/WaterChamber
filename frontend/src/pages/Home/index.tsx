@@ -1,22 +1,23 @@
 import Charts from "@pages/Charts";
-import React from "react";
 
 export default function Home() {
     return (
-        <div
-            className="h-fit flex flex-col"
-            style={{
-                height: "97vh",
-            }}
-        >
+        <>
             <div
-                className="chartContainer"
+                className="h-fit flex flex-col"
                 style={{
-                    paddingBottom: "20px",
+                    height: "97vh",
                 }}
             >
-                <Charts />
+                <div
+                    className="chartContainer"
+                    style={{
+                        paddingBottom: "20px",
+                    }}
+                >
+                    <Charts />
+                </div>
             </div>
-        </div>
+        </>
     );
 }

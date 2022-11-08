@@ -39,7 +39,7 @@ export default function Charts() {
     useEffect(() => {
         const interval = setInterval(() => {
             updateData();
-        }, ChartData[0].interval);
+        }, 300);
         return () => clearInterval(interval);
     }, []);
 
