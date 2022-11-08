@@ -8,8 +8,6 @@ import Tooltip from "@components/Tooltip";
 import { useState } from "react";
 //import { Color } from "highcharts";
 
-// TODO: Add a color picker for the chart line colors
-
 export default function Settings() {
     const settingsData = {
         ip: "",
@@ -101,30 +99,32 @@ export default function Settings() {
                             </div>
                         </li>
                     ))}
-                    <button
-                        onClick={handleSave}
-                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
-                    >
-                        Add Chart
-                    </button>
-                    <button
-                        onClick={handleDeleteAll}
-                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
-                    >
-                        Clear All
-                    </button>
-                    <button
-                        onClick={handleDelete}
-                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
-                    >
-                        Delete Last
-                    </button>
-                    <button
-                        onClick={handleReset}
-                        className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
-                    >
-                        Reset Form
-                    </button>
+                    <div className="pl-[6rem] pt-[2rem] pb-[2rem]">
+                        <button
+                            onClick={handleSave}
+                            className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                        >
+                            Add Chart
+                        </button>
+                        <button
+                            onClick={handleDeleteAll}
+                            className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                        >
+                            Clear All
+                        </button>
+                        <button
+                            onClick={handleDelete}
+                            className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                        >
+                            Delete Last
+                        </button>
+                        <button
+                            onClick={handleReset}
+                            className="ml-auto bg-blue-700 hover:bg-blue-800 focus:outline-none text-white font-medium text-sm rounded-lg py-2.5 px-5 text-rounded mr-5 shadow-md hover:shadow-xl focus:bg-blue-600 transition duration-100 ease-in focus:shadow-inner"
+                        >
+                            Reset Form
+                        </button>
+                    </div>
                 </ul>
             </div>
             <div
