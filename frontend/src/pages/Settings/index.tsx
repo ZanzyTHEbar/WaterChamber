@@ -8,9 +8,7 @@ import Tooltip from "@components/Tooltip";
 import { useState } from "react";
 //import { Color } from "highcharts";
 
-// TODO: Add a color picker for the chart line color
-
-// TODO: Add a function to onClick button that saves the settings
+// TODO: Add a color picker for the chart line colors
 
 export default function Settings() {
     const settingsData = {
@@ -31,8 +29,15 @@ export default function Settings() {
 
     const handleSave = () => {
         //console.log(inputState);
+        const isEmpty = Object.keys(ChartData[0]).length === 0;
+        //console.log(isEmpty);
         // add  the inputState object to the ChartData array
-        ChartData.push(inputState);
+        if (ChartData.length === 1 && isEmpty) {
+            ChartData.pop();
+            ChartData.push(inputState);
+        } else {
+            ChartData.push(inputState);
+        }
     };
 
     const handleReset = () => {

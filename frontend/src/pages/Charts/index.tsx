@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 // recursive function to get data from API
 // handles nested objects
 function fetchFromObject(obj, prop) {
-    if (typeof obj === "undefined") {
+    if (typeof obj === "undefined" || obj === null) {
         return false;
     }
     const _index = prop.indexOf(".");
@@ -21,13 +21,15 @@ function fetchFromObject(obj, prop) {
 }
 
 export default function Charts() {
+    const isEmpty = Object.keys(ChartData[0]).length === 0;
     const [chart, setChart] = useState({
         data: {},
     });
 
     const updateData = () => {
         ChartData.forEach((chart) => {
-            getData(chart.ip + chart.endpoint).then((res) => {
+            //console.log(chart);
+            getData(chart["ip"] + chart["endpoint"] || "").then((res) => {
                 //console.log(res);
                 setChart({
                     data: { ...res },
@@ -62,7 +64,7 @@ export default function Charts() {
                         overflow: "auto",
                     }}
                 >
-                    {ChartData.length === 0 ? (
+                    {ChartData.length === 1 && isEmpty ? (
                         <div
                             className="flex items-center justify-center"
                             style={{
@@ -82,19 +84,19 @@ export default function Charts() {
                         <ul className="flow-root space-y-2 items-center content-center justify-center flex-col">
                             <div>
                                 {ChartData.map((item, index) => (
-                                    <li key={index} className={item.cName}>
-                                        {item.interval === 0
-                                            ? (item.interval = 3000)
+                                    <li key={index} className={item["cName"]}>
+                                        {item["interval"] === 0
+                                            ? (item["interval"] = 3000)
                                             : null}
                                         <Chart
-                                            title={item.title}
-                                            yAxis={item.y_axis_title}
-                                            lineColor={item.line_color}
+                                            title={item["title"]}
+                                            yAxis={item["y_axis_title"]}
+                                            lineColor={item["line_color"]}
                                             data={fetchFromObject(
                                                 chart.data,
-                                                item.object_id
+                                                item["object_id "] || ""
                                             )}
-                                            interval={item.interval}
+                                            interval={item["interval"]}
                                         />
                                     </li>
                                 ))}
