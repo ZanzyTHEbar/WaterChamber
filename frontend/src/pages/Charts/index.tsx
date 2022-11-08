@@ -69,6 +69,11 @@ export default function Charts() {
                             className="flex items-center justify-center"
                             style={{
                                 height: "100%",
+                                position: "fixed",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                WebkitTransform: "translate(-50%, -50%)",
                             }}
                         >
                             <header
@@ -77,7 +82,9 @@ export default function Charts() {
                                 }}
                                 className="text-2xl font-bold"
                             >
-                                No charts to display
+                                No charts to display yet.
+                                <br />
+                                Please add a chart in the settings page.
                             </header>
                         </div>
                     ) : (

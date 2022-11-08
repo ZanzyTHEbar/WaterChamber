@@ -89,8 +89,8 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 800,
-        "width": 900,
+        "height": 893,
+        "width": 1036,
         "resizable": true,
         "center": true,
         "title": "ESP32 Data Logger",
@@ -99,8 +99,8 @@
         "transparent": true
       },
       {
-        "height": 800,
-        "width": 900,
+        "height": 893,
+        "width": 1036,
         "decorations": false,
         "resizable": false,
         "center": true,
