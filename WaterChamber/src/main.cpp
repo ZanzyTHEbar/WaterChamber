@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <secrets.h> // WiFi credentials - not included in repo you need to create this file in the /includes directory
+// Utilities
+//#include <data/utilities/helpers.hpp>
 // Config
 #include <data/config/project_config.hpp>
 #include <data/StateManager/StateManager.hpp>
@@ -27,9 +29,9 @@
 // Background tasks
 #include "local/data/BackgroundTasks/timedtasks.hpp"
 
-// Objects
 std::string hostname = "waterchamber";
 
+// Objects
 ProjectConfig configManager(std::string(), hostname);
 WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, hostname, 1);
 
