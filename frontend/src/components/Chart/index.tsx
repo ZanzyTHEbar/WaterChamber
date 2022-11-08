@@ -3,7 +3,6 @@ import {
     faLineChart,
     faBarChart,
     faAreaChart,
-    faPieChart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Highcharts from "highcharts";

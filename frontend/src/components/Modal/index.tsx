@@ -12,7 +12,9 @@ export default function Modal(props) {
             onClick={handleClose}
             className="fixed pt-8 mt-7 inset-0 bg-black bg-opacity-25 backdrop-blur-xl flex justify-center items-center content-center self-center"
         >
-            <div className={`md:w-[${props.width}px] w[90%] mx-auto flex flex-col`}>
+            <div
+                className={`md:w-[${props.width}px] w[90%] mx-auto flex flex-col`}
+            >
                 <div className="container px-1 flex items-center justify-between">
                     <button
                         type="button"
