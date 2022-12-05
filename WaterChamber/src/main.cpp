@@ -33,10 +33,10 @@ std::string hostname = "waterchamber";
 
 // Objects
 ProjectConfig configManager(std::string(), hostname);
-WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, hostname, 1);
+WiFiHandler network(&configManager, &wifiStateManager, WIFI_SSID, WIFI_PASS, 1);
 
-APIServer server(80, &configManager, "/api/v1", "/wifimanager", "/userCommands");
-OTA ota(&configManager, hostname);
+APIServer server(80, &configManager, "/control", "/wifimanager", "/userCommands");
+OTA ota(&configManager);
 MDNSHandler mDNS(&mdnsStateManager, &configManager, ("_" + hostname), "data", "_tcp", "api_port", "80");
 
 NetworkNTP ntp;
@@ -64,6 +64,7 @@ void setup()
 	Serial.begin(115200);
 
 	Serial.setDebugOutput(true);
+	configManager.attach(&mDNS);
 	configManager.initConfig(); // call before load to initialise the structs
 	configManager.load();		// load the config from flash
 
