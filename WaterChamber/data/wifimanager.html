@@ -394,41 +394,11 @@
                     <br>
                     <hr>
                     <p>
-                        <input type="submit" value="Save">
-                        <input type="checkbox" id="reboot" name="reboot" onclick="enableOTA()" checked><label
-                            for="reboot" style="padding-left: 35px;">Reboot Device</label>
-                        <script>
-                            onsubmit = (event) => {
-                                event.preventDefault();
-                                var form = event.target;
-                                var data = new FormData(form);
-                                var xhr = new XMLHttpRequest();
-                                xhr.open(form.method, form.action);
-                                xhr.send(data);
-                                xhr.onload = () => {
-                                    if (xhr.status == 200) {
-                                        alert("Settings Saved");
-                                        if (document.getElementById("reboot").checked == true) {
-                                            alert("Rebooting Device");
-                                            // get request to reboot device
-                                            var xhr = new XMLHttpRequest();
-                                            xhr.open("GET", "/wifimanager/builtin/command/save");
-                                            xhr.send();
-                                            xhr.onload = () => {
-                                                if (xhr.status == 200) {
-                                                    alert("Device Rebooted");
-                                                } else {
-                                                    alert("Error Rebooting Device");
-                                                }
-                                            };
-                                        }
-                                    } else {
-                                        alert("Error Saving Settings");
-                                    }
-                                };
-                            };
-                        </script>
+                        <input type="checkbox" id="reboot" name="reboot" checked><label for="reboot"
+                            style="padding-left: 35px;">Reboot Device</label>
                         <br>
+                        <br>
+                        <input type="submit" value="Save">
                     </p>
                     <p>
                     </p>
