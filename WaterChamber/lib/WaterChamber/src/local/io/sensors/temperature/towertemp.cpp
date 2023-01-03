@@ -24,7 +24,7 @@ int TowerTemp::getSensorCount()
 // * Parameters: None
 // * Return: None
 //******************************************************************************
-void TowerTemp::begin()
+bool TowerTemp::begin()
 {
     // Start up the ds18b20 library
     sensors->begin();

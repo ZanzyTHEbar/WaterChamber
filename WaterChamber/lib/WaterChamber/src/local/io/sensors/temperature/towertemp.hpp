@@ -16,7 +16,7 @@ class TowerTemp
 public:
     TowerTemp();
     virtual ~TowerTemp();
-    void begin();
+    bool begin();
     void checkSensors();
     void setSensorCount();
     int getSensorCount();
