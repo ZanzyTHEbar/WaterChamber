@@ -43,7 +43,7 @@ bool TowerTemp::begin()
     if (_sensors_count == 0)
     {
         log_e("No temperature sensors found - please connect them and restart the device");
-        return;
+        return false;
     }
     // locate devices on the bus
     log_i("Found %d devices", _sensors_count, DEC);
@@ -62,6 +62,7 @@ bool TowerTemp::begin()
             log_w("Found ghost device at %d but could not detect address. Check power and cabling", i, DEC);
         }
     }
+    return true;
 }
 
 //******************************************************************************

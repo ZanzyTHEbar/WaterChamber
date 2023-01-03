@@ -34,7 +34,8 @@ void AccumulateData::loop()
     humidity->readDHT();
 #endif // USE_DHT_SENSOR
 
-    tower_temp->getTempC();
+    if (tower_temp->getSensorCount() > 0)
+        tower_temp->getTempC();
     waterLevelSensor->readWaterLevelUltraSonic();
 }
 
