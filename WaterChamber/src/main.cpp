@@ -65,14 +65,27 @@ AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSen
 #endif // USE_GOOGLE_SHEETS
 TimedTasks timedTasks(&data);
 
+const int led1 = 4;
+
 void printHelloWorld(AsyncWebServerRequest *request)
 {
 	Serial.println("Hello World");
 	request->send(200, "text/plain", "Hello World");
 }
 
+void blink(AsyncWebServerRequest *request)
+{
+	Serial.println("Blinking LED");
+	digitalWrite(led1, HIGH);
+	Network_Utilities::my_delay(1);
+	digitalWrite(led1, LOW);
+	Network_Utilities::my_delay(1);
+	request->send(200, "text/plain", "We have blinked the LED");
+}
+
 void setup()
 {
+	pinMode(led1, OUTPUT);
 	Serial.begin(115200);
 
 	Serial.setDebugOutput(true);
@@ -109,6 +122,8 @@ void setup()
 		// server.updateCommandHandlers("blink", blink);                // add a command handler to the API server - you can add as many as you want - you can also add methods.
 		server.updateCommandHandlers("helloWorld", [&](AsyncWebServerRequest *request)
 									 { printHelloWorld(request); }); // add a command handler to the API server - you can add as many as you want - you can also add methods.
+		server.updateCommandHandlers("blink", [&](AsyncWebServerRequest *request)
+									 { blink(request); });
 		server.begin();
 		log_d("[SETUP]: Starting API Server");
 		break;

@@ -1,7 +1,7 @@
 [wokwi]
 version = 1
-elf = ".pio/build/debug/WaterChamber-ca19c4a3222886401da1e7c260c5b989c3da3094-debug-ca19c4a-master.elf"
-firmware = ".pio/build/debug/WaterChamber-ca19c4a3222886401da1e7c260c5b989c3da3094-debug-ca19c4a-master.bin"
+elf = ".pio/build/debug/WaterChamber-3cea426396520f99267c51683b68e01777233907-debug-3cea426-master.elf"
+firmware = ".pio/build/debug/WaterChamber-3cea426396520f99267c51683b68e01777233907-debug-3cea426-master.bin"
 
 [[net.forward]]
 from = "localhost:8180"
