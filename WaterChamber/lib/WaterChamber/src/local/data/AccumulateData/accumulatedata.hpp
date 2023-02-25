@@ -5,7 +5,7 @@
 
 // data Struct
 #include "data/config/project_config.hpp"
-#include "data/StateManager/StateManager.hpp"
+#include "data/statemanager/StateManager.hpp"
 // Temp local/io/Sensors
 #include "local/io/sensors/temperature/towertemp.hpp"
 // Humidity local/io/Sensors

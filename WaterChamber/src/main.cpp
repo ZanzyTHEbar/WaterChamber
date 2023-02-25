@@ -1,15 +1,26 @@
 #include <Arduino.h>
 #include <secrets.h> // WiFi credentials - not included in repo you need to create this file in the /includes directory
 // Utilities
-//#include <data/utilities/helpers.hpp>
+// #include <data/utilities/helpers.hpp>
 // Config
 #include <data/config/project_config.hpp>
 #include <data/StateManager/StateManager.hpp>
 
 // Network
-#include <mDNS/MDNSManager.hpp>
-#include <ota/OTA.hpp>
-#include <wifihandler/wifiHandler.hpp>
+//! Optional header files
+#include <network/mDNS/MDNSManager.hpp>
+#include <network/ota/OTA.hpp>
+#include <utilities/network_utilities.hpp> // various network utilities
+// #include <utilities/Observer.hpp>
+// #include <utilities/api_utilities.hpp>
+// #include <utilities/enuminheritance.hpp> // used for extending enums with new
+// values
+// #include <utilities/makeunique.hpp> // used with smart pointers (unique_ptr)
+// to create unique objects
+// #include <utilities/helpers.hpp> // various helper functions
+
+//! Required header files
+#include <EasyNetworkManager.h> // (*)
 #include <api/webserverHandler.hpp>
 #if USE_GOOGLE_SHEETS
 #include "local/network/HTTPClient/http.hpp"
@@ -54,9 +65,10 @@ AccumulateData data(&configManager, &ntp, &tower_temp, &humidity, &waterLevelSen
 #endif // USE_GOOGLE_SHEETS
 TimedTasks timedTasks(&data);
 
-void printHelloWorld()
+void printHelloWorld(AsyncWebServerRequest *request)
 {
 	Serial.println("Hello World");
+	request->send(200, "text/plain", "Hello World");
 }
 
 void setup()
@@ -68,7 +80,7 @@ void setup()
 	configManager.initConfig(); // call before load to initialise the structs
 	configManager.load();		// load the config from flash
 
-	network.setupWifi();
+	network.begin();
 	mDNS.startMDNS();
 
 	// handle the WiFi connection state changes
@@ -95,7 +107,8 @@ void setup()
 	{
 		// only start the API server if we have wifi connection
 		// server.updateCommandHandlers("blink", blink);                // add a command handler to the API server - you can add as many as you want - you can also add methods.
-		server.updateCommandHandlers("helloWorld", printHelloWorld); // add a command handler to the API server - you can add as many as you want - you can also add methods.
+		server.updateCommandHandlers("helloWorld", [&](AsyncWebServerRequest *request)
+									 { printHelloWorld(request); }); // add a command handler to the API server - you can add as many as you want - you can also add methods.
 		server.begin();
 		log_d("[SETUP]: Starting API Server");
 		break;

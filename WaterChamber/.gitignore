@@ -3,3 +3,4 @@
 keys
 secrets.h
 *.log
+tools/firmware_name.txt
