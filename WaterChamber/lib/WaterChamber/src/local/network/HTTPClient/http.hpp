@@ -19,8 +19,6 @@ public:
     // constructors
     NetworkHTTP(const std::string &google_script_id);
     virtual ~NetworkHTTP();
-    // Functions
-    void begin();
     void loop(const JsonDocument &local_doc);
 
     // Private variables

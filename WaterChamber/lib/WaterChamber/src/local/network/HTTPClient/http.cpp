@@ -2,13 +2,8 @@
 
 NetworkHTTP::NetworkHTTP(const std::string &google_script_id) : http(new HTTPClient),
                                                                 _google_script_id(google_script_id),
-                                                                _url(""),
-                                                                httpCode(0) {}
-
-NetworkHTTP::~NetworkHTTP() {}
-
-void NetworkHTTP::begin()
-{
+                                                                _url(std::string()),
+                                                                httpCode(0) {
     data = {
         .id = "",
         .timestamp = "",
@@ -19,7 +14,9 @@ void NetworkHTTP::begin()
         .humidity = "",
         .humidity_temp = "",
         .temp_sensors = {"", "", "", "", "", "", "", "", "", ""}};
-}
+                                                                }
+
+NetworkHTTP::~NetworkHTTP() {}
 
 void NetworkHTTP::loop(const JsonDocument &local_doc)
 {
@@ -62,8 +59,7 @@ void NetworkHTTP::loop(const JsonDocument &local_doc)
         log_i("HTTP GET code: %d", httpCode);
         if (httpCode == HTTP_CODE_OK)
         {
-            std::string payload = http->getString().c_str();
-            log_i("HTTP GET payload: %s", payload.c_str());
+            log_i("HTTP GET payload: %s", http->getString().c_str());
         }
 
         http->end();
