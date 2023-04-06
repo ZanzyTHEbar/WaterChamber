@@ -8,7 +8,6 @@
 #include <memory>
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <strTools.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
 #include <local/network/ntp/ntp.hpp>
