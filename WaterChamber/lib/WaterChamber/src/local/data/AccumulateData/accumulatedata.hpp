@@ -15,36 +15,33 @@
 // Time stamp
 #include "local/network/ntp/ntp.hpp"
 #if USE_GOOGLE_SHEETS
-#include "local/network/HTTPClient/http.hpp"
-#endif // USE_GOOGLE_SHEETS
-class AccumulateData
-{
-public:
-    AccumulateData(ProjectConfig *configManager,
-                   NetworkNTP *ntp,
+#    include "local/network/HTTPClient/http.hpp"
+#endif  // USE_GOOGLE_SHEETS
+class AccumulateData {
+   public:
+    AccumulateData(ProjectConfig& configManager, NetworkNTP& ntp,
 #if USE_GOOGLE_SHEETS
-                   NetworkHTTP *http,
-#endif // USE_GOOGLE_SHEETS
-                   TowerTemp *tower_temp,
-                   Humidity *humidity,
-                   WaterLevelSensor *waterLevelSensor);
+                   NetworkHTTP& http,
+#endif  // USE_GOOGLE_SHEETS
+                   TowerTemp& tower_temp, Humidity& humidity,
+                   WaterLevelSensor& waterLevelSensor);
     virtual ~AccumulateData();
 
     void loop();
     bool accumulateData();
 
-private:
+   private:
     // Stack Data to send
     int _maxTemp;
     int _numTempSensors;
 
-    ProjectConfig *configManager;
-    NetworkNTP *ntp;
+    ProjectConfig& configManager;
+    NetworkNTP& ntp;
 #if USE_GOOGLE_SHEETS
-    NetworkHTTP *http;
-#endif // USE_GOOGLE_SHEETS
-    TowerTemp *tower_temp;
-    Humidity *humidity;
-    WaterLevelSensor *waterLevelSensor;
+    NetworkHTTP& http;
+#endif  // USE_GOOGLE_SHEETS
+    TowerTemp& tower_temp;
+    Humidity& humidity;
+    WaterLevelSensor& waterLevelSensor;
 };
 #endif

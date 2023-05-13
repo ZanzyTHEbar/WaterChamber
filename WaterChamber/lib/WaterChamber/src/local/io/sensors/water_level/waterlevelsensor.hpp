@@ -4,37 +4,33 @@
  */
 #pragma once
 #ifndef WATERLEVELSENSOR_HPP
-#define WATERLEVELSENSOR_HPP
-#include <memory>
-#include <functional>
-#include <HCSR04.h>
+#    define WATERLEVELSENSOR_HPP
+#    include <HCSR04.h>
+#    include <functional>
 
-#include <utilities/network_utilities.hpp>
-#include "local/io/sensors/temperature/towertemp.hpp"
+#    include <utilities/network_utilities.hpp>
+#    include "local/io/sensors/temperature/towertemp.hpp"
 
-class WaterLevelSensor
-{
-private:
-    // Private variables
+class WaterLevelSensor {
+    //* Private variables
     double _radius;
     double _height;
-    struct Data_t
-    {
+    struct Data_t {
         double water_level;
         double water_level_percentage;
     };
 
-    TowerTemp *_towerTemp;
-    std::shared_ptr<UltraSonicDistanceSensor> _distanceSensor; // Initialize sensor that uses digital pins 13 and 12.
-    // Private functions
+    TowerTemp& _towerTemp;
+    UltraSonicDistanceSensor _distanceSensor;
+    //* Private functions
     double readSensor();
 
-public:
-    // Constructor
-    WaterLevelSensor(TowerTemp *_towerTemp);
+   public:
+    //* Constructor
+    WaterLevelSensor(TowerTemp& _towerTemp);
     virtual ~WaterLevelSensor();
     void begin();
-    // Read the water level
+    //* Read the water level
     Data_t readWaterLevelUltraSonic();
     Data_t result;
 };

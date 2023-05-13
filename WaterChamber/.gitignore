@@ -4,3 +4,4 @@ keys
 secrets.h
 *.log
 tools/firmware_name.txt
+__pycache__
