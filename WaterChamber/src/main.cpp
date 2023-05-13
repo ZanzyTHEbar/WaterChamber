@@ -42,7 +42,7 @@ NetworkHTTP http(GOOGLE_SCRIPT_ID);
 #endif  // USE_GOOGLE_SHEETS
 TowerTemp tower_temp;
 Humidity humidity;
-WaterLevelSensor waterLevelSensor(&tower_temp);
+WaterLevelSensor waterLevelSensor(tower_temp);
 
 #if USE_GOOGLE_SHEETS
 AccumulateData data(configManager, ntp, http, tower_temp, humidity,

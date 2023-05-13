@@ -1,3 +1,3 @@
 #include "StateManager.hpp"
 
-StateManager<SensorStates_e> SensorStatesManager;
+StateManager<SensorStates_e> sensorStatesManager;
