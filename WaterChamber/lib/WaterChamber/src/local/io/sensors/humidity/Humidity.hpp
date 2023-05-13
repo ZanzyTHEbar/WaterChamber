@@ -86,12 +86,12 @@ class Humidity {
 
 //* Global Variables
 #if USE_SHT31_SENSOR
-    std::shared_ptr<Adafruit_SHT31> sht31;
-    std::shared_ptr<Adafruit_SHT31> sht31_2;
+    Adafruit_SHT31 sht31;
+    Adafruit_SHT31 sht31_2;
 #endif  // USE_SHT31_SENSOR
 
 #if USE_DHT_SENSOR
-    std::shared_ptr<DHT_Unified> dht;
+    DHT_Unified dht;
 #endif  // USE_DHT_SENSOR
 };
 #endif

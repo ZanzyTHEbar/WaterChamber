@@ -58,7 +58,7 @@ void setup() {
     pinMode(led1, OUTPUT);
     Serial.begin(115200);
 
-    Serial.setDebugOutput(true);
+    Serial.setDebugOutput(PRODUCTION);
     configManager.attach(&mDNS);
     configManager.load();  // load the config from flash
     network.begin();

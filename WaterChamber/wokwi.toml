@@ -1,7 +1,7 @@
 [wokwi]
 version = 1
-elf = ".pio/build/debug/debug-v1.0.0-master.elf"
-firmware = ".pio/build/debug/debug-v1.0.0-master.bin"
+elf = ".pio/build/wrooms3/wrooms3-v1.0.0-master.elf"
+firmware = ".pio/build/wrooms3/wrooms3-v1.0.0-master.bin"
 [[net.forward]]
 from = "localhost:8180"
 to = "target:80"

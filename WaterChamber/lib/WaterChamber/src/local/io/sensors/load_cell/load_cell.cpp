@@ -1,6 +1,6 @@
 #include "load_cell.hpp"
 
-LoadCell::LoadCell(TwoWire& pWire = Wire, uint8_t addr = HX711_I2C_ADDR)
+LoadCell::LoadCell(TwoWire& pWire, uint8_t addr)
     : _pWire(pWire),
       _address(addr),
       pFlag(0),
@@ -24,7 +24,7 @@ bool LoadCell::begin() {
     return false;
 }
 
-double LoadCell::readSensor(uint8_t times = 12) {
+double LoadCell::readSensor(uint8_t times) {
     //* Read the sensor
     long value = average(times);
     uint8_t ppFlag = peelFlag();
