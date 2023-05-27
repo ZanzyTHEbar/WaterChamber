@@ -13,9 +13,7 @@ class Scanner
 public:
     Scanner(void);
     virtual ~Scanner(void);
-    void SetupScan();
-    void BeginScan();
+    void begin();
+    void scan();
 };
-
-extern Scanner Scan;
 #endif

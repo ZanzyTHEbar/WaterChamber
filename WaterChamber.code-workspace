@@ -1,11 +1,16 @@
 {
   "folders": [
     {
+      "name": "WaterChamber",
       "path": "WaterChamber"
+    },
+    {
+      "name": "Repo Root",
+      "path": "."
     }
   ],
   "settings": {
-    "cSpell.words": ["checkgit", "defualt", "HCSR"],
+    "cSpell.words": ["checkgit", "HCSR"],
     "files.associations": {
       "*.json.liquid": "json",
       "*.yaml.liquid": "yaml",
@@ -65,7 +70,11 @@
       "stdexcept": "cpp",
       "streambuf": "cpp",
       "cinttypes": "cpp",
-      "typeinfo": "cpp"
+      "typeinfo": "cpp",
+      "ranges": "cpp",
+      "span": "cpp",
+      "xstring": "cpp",
+      "xutility": "cpp"
     }
   }
 }
