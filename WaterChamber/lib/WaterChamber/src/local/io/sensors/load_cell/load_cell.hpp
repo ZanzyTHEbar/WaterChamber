@@ -4,22 +4,6 @@
 #include <Wire.h>
 #include "Arduino.h"
 
-// #define ENABLE_DBG
-
-#ifdef ENABLE_DBG
-#    define DBG(...)                     \
-        {                                \
-            Serial.print("[");           \
-            Serial.print(__FUNCTION__);  \
-            Serial.print("(): ");        \
-            Serial.print(__LINE__);      \
-            Serial.print(" ] ");         \
-            Serial.println(__VA_ARGS__); \
-        }
-#else
-#    define DBG(...)
-#endif
-
 #define HX711_I2C_ADDR (0x64)  ///< sensor IIC address
 
 class LoadCell {

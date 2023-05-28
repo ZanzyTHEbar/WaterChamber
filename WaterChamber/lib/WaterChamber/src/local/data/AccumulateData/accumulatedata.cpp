@@ -5,7 +5,8 @@ AccumulateData::AccumulateData(ProjectConfig& configManager, NetworkNTP& ntp,
                                NetworkHTTP* http,
 #endif  // USE_GOOGLE_SHEETS
                                TowerTemp& tower_temp, Humidity& humidity,
-                               WaterLevelSensor& waterLevelSensor)
+                               WaterLevelSensor& waterLevelSensor,
+                               LoadCell& loadCell)
     : _maxTemp(100),
       _numTempSensors(0),
       configManager(configManager),
@@ -15,7 +16,8 @@ AccumulateData::AccumulateData(ProjectConfig& configManager, NetworkNTP& ntp,
 #endif  // USE_GOOGLE_SHEETS
       tower_temp(tower_temp),
       humidity(humidity),
-      waterLevelSensor(waterLevelSensor) {
+      waterLevelSensor(waterLevelSensor),
+      loadCell(loadCell) {
 }
 
 AccumulateData::~AccumulateData() {}
@@ -24,18 +26,19 @@ void AccumulateData::loop() {
     ntp.NTPLoop();
 // Initialize the libraries and collect the data
 #if USE_SHT31_SENSOR
-    humidity.ReadSensor();
+    humidity.readSensor();
 #endif  // USE_SHT31_SENSOR
 
 #if USE_DHT_SENSOR
     humidity.readDHT();
 #endif  // USE_DHT_SENSOR
-    log_i("Reading Tower Temp");
+    log_i("[Accumulate Data]: Reading Tower Temp");
     if (tower_temp.getSensorCount() > 0) {
-        log_i("Inside of Temp Sensor Check");
+        log_d("[Accumulate Data]: Inside of Temp Sensor Check");
         tower_temp.getTempC();
         waterLevelSensor.readWaterLevelUltraSonic();
     }
+    log_i("[Accumulate Data]: weight is: %0.3fg", loadCell.readWeight());
 }
 
 //******************************************************************************
@@ -87,6 +90,7 @@ bool AccumulateData::accumulateData() {
     jsonDoc["humidity_dht"] = humidity.result.humidity;
     jsonDoc["humidity_temp_dht"] = humidity.result.temp;
 #endif  // USE_DHT_SENSOR
+    jsonDoc["load_cell"] = loadCell.readWeight();
     JsonArray temp_sensor_data = jsonDoc.createNestedArray("temp_sensors");
     for (int i = 0; i < _numTempSensors; i++) {
         temp_sensor_data.add(tower_temp.temp_sensor_results.temp[i]);
