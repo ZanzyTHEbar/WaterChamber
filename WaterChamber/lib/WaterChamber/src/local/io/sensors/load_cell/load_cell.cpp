@@ -1,18 +1,31 @@
 #include "load_cell.hpp"
 
-#include "load_cell.hpp"
-
 LoadCell::LoadCell(TwoWire* pWire, uint8_t addr)
-    : _pWire(pWire), _address(addr) {}
+    : _address(addr),
+      _pFlag(0),
+      _offset(0),
+      _pWire(pWire),
+      _calibration(2236.0f),
+      _sum{0},
+      _total(0),
+      _average(0),
+      _index(0) {
+    _sum.reserve(10);
+}
 
-int LoadCell::begin(void) {
+LoadCell::~LoadCell() {
+    _sum.clear();
+    delete _pWire;
+}
+
+bool LoadCell::begin(void) {
     Wire.begin();
-    log_d("\r\n");
+    log_v("\r\n");
     Wire.beginTransmission(_address);
     _pWire->write(REG_DATA_INIT_SENSOR);
     _pWire->write(REG_CLEAR_REG_STATE);
     if (Wire.endTransmission() == 0) {
-        log_d("\r\n");
+        log_v("\r\n");
         _offset = average(10);
         // Manually set the calibration values
         // loadCell.setCalibration(2236.f);
@@ -54,21 +67,22 @@ int LoadCell::begin(void) {
         log_i("[Load Cell]: The calibration value of the LoadCell is: ",
               this->getCalibration());
         this->setCalibration(this->getCalibration());
+        log_i("[Load Cell]: Weight %0.3f", this->readWeight());
         delay(1000);
         return true;
     }
-    log_d("[Load Cell]: IIC Failed ");
+    log_v("[Load Cell]: IIC Failed ");
     return false;
 }
 
 float LoadCell::readWeight(uint8_t times) {
     long value = average(times);
-    uint8_t ppFlag = peelFlag();
-    if (ppFlag == 1) {
-        // pFlag = 1;
+    uint8_t p_pFlag = peelFlag();
+    if (p_pFlag == 1) {
+        // _pFlag = 1;
         _offset = average(times);
         // log_i("_offset");
-    } else if (ppFlag == 2) {
+    } else if (p_pFlag == 2) {
         _calibration = getCalibration();
         // log_i("_calibration");
     }
@@ -77,8 +91,8 @@ float LoadCell::readWeight(uint8_t times) {
 }
 
 bool LoadCell::getCalFlag() {
-    uint8_t ppFlag = peelFlag();
-    if (ppFlag == 2) {
+    uint8_t p_pFlag = peelFlag();
+    if (p_pFlag == 2) {
         return true;
     } else {
         return false;
@@ -94,12 +108,18 @@ void LoadCell::peel() {
     writeReg(REG_CLICK_RST, &data, 1);
 }
 long LoadCell::average(uint8_t times) {
-    long sum = 0;
-    for (uint8_t i = 0; i < times; i++) {
-        sum += getValue();
+    //* Rolling Average
+    long weight = 0;
+    _total -= _sum.at(_index);
+    _sum[_index] = getValue();
+    _total += _sum.at(_index);
+    _index++;
+    if (_index >= times) {
+        _index = 0;
     }
+    weight = _total / times;
 
-    return sum / times;
+    return weight;
 }
 float LoadCell::getCalibration() {
     uint8_t data[4];
@@ -110,7 +130,7 @@ float LoadCell::getCalibration() {
     value = (value << 8) | data[1];
     value = (value << 8) | data[2];
     value = (value << 8) | data[3];
-    log_d("[Load Cell]: %d", value, HEX);
+    log_v("[Load Cell]: %d", value, HEX);
     // if(value == 0) value ==2234.f;
     float* cal = (float*)&value;
 
@@ -127,7 +147,7 @@ uint8_t LoadCell::peelFlag() {
     readReg(REG_DATA_GET_PEEL_FLAG, data, 1);
     // log_i(data[0]);
     if (data[0] == 1) {
-        log_d("---------------------------------");
+        log_v("---------------------------------");
         return 1;
     } else if (data[0] == 2) {
         return 2;
@@ -145,7 +165,7 @@ long LoadCell::getValue() {
         value = (long)((value << 8) | data[2]);
         value = (long)((value << 8) | data[3]);
     } else {
-        log_d("[Load Cell]: DATA ERROR");
+        log_e("[Load Cell]: DATA ERROR");
     }
     // log_i(sizeof(int),HEX);
     // log_i(value^0x800000);
@@ -175,7 +195,7 @@ int LoadCell::readReg(uint8_t reg, uint8_t* data, size_t size) {
 
     for (uint8_t i = 0; i < size; i++) {
         data[i] = _pWire->read();
-        log_d("[Load Cell]: %d", data[i], HEX);
+        log_v("[Load Cell]: %d", data[i], HEX);
     }
 
     return 1;
@@ -183,7 +203,7 @@ int LoadCell::readReg(uint8_t reg, uint8_t* data, size_t size) {
 
 uint8_t LoadCell::writeReg(uint8_t reg, const void* data, size_t size) {
     if (data == NULL) {
-        log_d("[Load Cell]: pBuf ERROR!! : null pointer");
+        log_v("[Load Cell]: pBuf ERROR!! : null pointer");
     }
     uint8_t* _pBuf = (uint8_t*)data;
     _pWire->beginTransmission(_address);

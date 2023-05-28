@@ -1,8 +1,9 @@
 #ifndef LOAD_CELL_HPP
 #define LOAD_CELL_HPP
 
+#include <Arduino.h>
 #include <Wire.h>
-#include "Arduino.h"
+#include <vector>
 
 #define HX711_I2C_ADDR (0x64)  ///< sensor IIC address
 
@@ -18,7 +19,7 @@ class LoadCell {
 
 #define REG_CLICK_RST 0x73  ///< Simulation of RST
 #define REG_CLICK_CAL 0x74  ///< Simulation of CAL
-    /*!
+    /**
      * @fn LoadCell
      * @brief Constructor
      * @param pWire I2c controller
@@ -26,13 +27,19 @@ class LoadCell {
      */
     LoadCell(TwoWire* pWire = &Wire, uint8_t addr = HX711_I2C_ADDR);
 
+    /**
+     * @fn ~LoadCell
+     * @brief De-Constructor
+     */
+    virtual ~LoadCell();
+
     /*!
      * @fn begin
      * @brief init function
      * @return return 1 if initialization succeeds, otherwise return non-zero
      * and error code.
      */
-    int begin(void);
+    bool begin(void);
 
     /*!
      * @fn readWeight
@@ -102,9 +109,13 @@ class LoadCell {
 
     uint8_t writeReg(uint8_t reg, const void* data, size_t size);
     uint8_t _address;
-    uint8_t pFlag = 0;
+    uint8_t _pFlag = 0;
     long _offset;
     TwoWire* _pWire;
-    float _calibration = 2236.0f;
+    float _calibration;
+    std::vector<long> _sum;
+    long _total;
+    long _average;
+    uint8_t _index;
 };
 #endif

@@ -84,7 +84,7 @@ void EventHandler::begin(void) {
 }
 
 void EventHandler::loop(void) {
-    ota.handleOTAUpdate();
-    data.loop();
-    timedTasks.accumulateSensorData();
+    //ota.handleOTAUpdate();
+    //data.loop();
+    //timedTasks.accumulateSensorData();
 }
