@@ -1,20 +1,21 @@
 #include "load_cell.hpp"
 
-LoadCell::LoadCell(TwoWire* pWire, uint8_t addr)
+LoadCell::LoadCell(WaterConfig& waterConfig, TwoWire* pWire, uint8_t addr)
     : _address(addr),
       _pFlag(0),
       _offset(0),
       _pWire(pWire),
       _calibration(2236.0f),
-      _sum{0},
+      _readings{0},
       _total(0),
       _average(0),
-      _index(0) {
-    _sum.reserve(10);
+      _index(0),
+      waterConfig(waterConfig) {
+    _readings.reserve(100);
 }
 
 LoadCell::~LoadCell() {
-    _sum.clear();
+    _readings.clear();
     delete _pWire;
 }
 
@@ -27,48 +28,64 @@ bool LoadCell::begin(void) {
     if (Wire.endTransmission() == 0) {
         log_v("\r\n");
         _offset = average(10);
-        // Manually set the calibration values
-        // loadCell.setCalibration(2236.f);
-        //// remove the peel
-        // loadCell.peel();
-        //  Set the calibration weight when the weight sensor module is
-        //  automatically calibrated (g)
-        this->setCalWeight(328);
-        // Set the trigger threshold (G) for automatic calibration of the weight
-        // sensor module. When only the weight of the object on the scale is
-        // greater than this value, the module will start the calibration
-        // process This value cannot be greater than the calibration weight of
-        // the setCalWeight() setting
-        this->setThreshold(50);
 
-        delay(2000);
-        // Start sensor calibration
-        this->enableCal();
-        long time1 = millis();
-        // Wait for sensor calibration to complete
-        while (!this->getCalFlag()) {
-            delay(1000);
-            if ((millis() - time1) > 7000) {
-                log_i(
-                    "[Load Cell ]: Calibration failed, no weight was detected "
-                    "on the scale");
-                log_i(
-                    "[Load Cell]: Please check whether the weight sensor "
-                    "module is placed "
-                    "correctly on the scale");
-                log_i(
-                    "[Load Cell]: Restarting calibration after 2 seconds, "
-                    "please wait.");
-                delay(2000);
+        auto calibration = waterConfig.getLoadCellCalibration();
+        log_d("[Load Cell]: Calibration value: %0.3f", calibration.calibration);
+
+        if (calibration.calibration <= 0.0) {
+            // Manually set the calibration values
+            // loadCell.setCalibration(2236.f);
+            //// remove the peel
+            // loadCell.peel();
+            //  Set the calibration weight when the weight sensor module is
+            //  automatically calibrated (g)
+            this->setCalWeight(328);
+            // Set the trigger threshold (G) for automatic calibration of the
+            // weight sensor module. When only the weight of the object on the
+            // scale is greater than this value, the module will start the
+            // calibration process This value cannot be greater than the
+            // calibration weight of the setCalWeight() setting
+            this->setThreshold(50);
+
+            delay(2000);
+            // Start sensor calibration
+            this->enableCal();
+            long time1 = millis();
+            // Wait for sensor calibration to complete
+            while (!this->getCalFlag()) {
+                delay(1000);
+                if ((millis() - time1) > 7000) {
+                    log_i(
+                        "[Load Cell ]: Calibration failed, no weight was "
+                        "detected "
+                        "on the scale");
+                    log_i(
+                        "[Load Cell]: Please check whether the weight sensor "
+                        "module is placed "
+                        "correctly on the scale");
+                    log_i(
+                        "[Load Cell]: Restarting calibration after 2 seconds, "
+                        "please wait.");
+                    delay(2000);
+                }
             }
+            // Obtain the calibration value. The accurate calibration value can
+            // be obtained after the calibration operation is completed
+            log_i(
+                "[Load Cell]: The calibration value of the LoadCell is: %0.3f",
+                this->getCalibration());
+            this->setCalibration(this->getCalibration());
+            log_i("[Load Cell]: Weight %0.3f", this->readWeight());
+            waterConfig.setLoadCellCalibration(this->getCalibration());
+            waterConfig.save();
+            delay(1000);
+            return true;
         }
-        // Obtain the calibration value. The accurate calibration value can be
-        // obtained after the calibration operation is completed
-        log_i("[Load Cell]: The calibration value of the LoadCell is: ",
-              this->getCalibration());
-        this->setCalibration(this->getCalibration());
-        log_i("[Load Cell]: Weight %0.3f", this->readWeight());
-        delay(1000);
+        log_d("[Load Cell]: Settings Calibration value");
+        this->setCalibration(calibration.calibration);
+        log_d("[Load Cell]: We have set the calibration value");
+        this->peel();
+        log_d("[Load Cell]: We have peeled the load cell");
         return true;
     }
     log_v("[Load Cell]: IIC Failed ");
@@ -92,11 +109,7 @@ float LoadCell::readWeight(uint8_t times) {
 
 bool LoadCell::getCalFlag() {
     uint8_t p_pFlag = peelFlag();
-    if (p_pFlag == 2) {
-        return true;
-    } else {
-        return false;
-    }
+    return (p_pFlag == 2);
 }
 void LoadCell::enableCal() {
     uint8_t data = 0;
@@ -107,20 +120,16 @@ void LoadCell::peel() {
     uint8_t data = 0;
     writeReg(REG_CLICK_RST, &data, 1);
 }
-long LoadCell::average(uint8_t times) {
-    //* Rolling Average
-    long weight = 0;
-    _total -= _sum.at(_index);
-    _sum[_index] = getValue();
-    _total += _sum.at(_index);
-    _index++;
-    if (_index >= times) {
-        _index = 0;
-    }
-    weight = _total / times;
 
-    return weight;
+long LoadCell::average(uint8_t times) {
+    long sum = 0;
+    for (uint8_t i = 0; i < times; i++) {
+        sum += getValue();
+    }
+
+    return sum / times;
 }
+
 float LoadCell::getCalibration() {
     uint8_t data[4];
     uint32_t value = 0;

@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <local/data/config/config.hpp>
 #include <vector>
 
 #define HX711_I2C_ADDR (0x64)  ///< sensor IIC address
@@ -25,7 +26,8 @@ class LoadCell {
      * @param pWire I2c controller
      * @param addr  I2C address(0x64/0x65/0x660x67)
      */
-    LoadCell(TwoWire* pWire = &Wire, uint8_t addr = HX711_I2C_ADDR);
+    LoadCell(WaterConfig& waterConfig, TwoWire* pWire = &Wire,
+             uint8_t addr = HX711_I2C_ADDR);
 
     /**
      * @fn ~LoadCell
@@ -113,9 +115,10 @@ class LoadCell {
     long _offset;
     TwoWire* _pWire;
     float _calibration;
-    std::vector<long> _sum;
+    std::vector<long> _readings;
     long _total;
     long _average;
     uint8_t _index;
+    WaterConfig& waterConfig;
 };
 #endif

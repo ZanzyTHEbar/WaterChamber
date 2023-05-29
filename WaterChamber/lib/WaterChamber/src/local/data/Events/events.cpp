@@ -1,24 +1,27 @@
 #include "events.hpp"
 
 EventHandler::EventHandler(void)
-    : configManager("easynetwork", DEFAULT_HOSTNAME),
-      network(configManager, WIFI_SSID, WIFI_PASS, 1),
-      server(80, configManager, "/control", "/wifimanager", "/userCommands"),
-      ota(configManager),
-      mDNS(configManager, "_waterchamber", "data", "_tcp", "api_port", "80"),
+    : projectConfig("easynetwork", DEFAULT_HOSTNAME),
+      configHandler(projectConfig),
+      waterConfig(projectConfig),
+      network(projectConfig, WIFI_SSID, WIFI_PASS, 1),
+      server(80, projectConfig, "/control", "/wifimanager", "/userCommands"),
+      ota(projectConfig),
+      mDNS(projectConfig, "_waterchamber", "data", "_tcp", "api_port", "80"),
       tower_temp(),
       humidity(),
       waterLevelSensor(tower_temp),
-      loadCell(),
+      loadCell(waterConfig),
 #if USE_GOOGLE_SHEETS
       http(GOOGLE_SCRIPT_ID),
-      data(configManager, ntp, http, tower_temp, humidity, waterLevelSensor),
+      data(projectConfig, ntp, http, tower_temp, humidity, waterLevelSensor),
 #else
-      data(configManager, ntp, tower_temp, humidity, waterLevelSensor,
+      data(projectConfig, ntp, tower_temp, humidity, waterLevelSensor,
            loadCell),
 #endif
       timedTasks(data),
-      multiplexer(WIRE_OBJECT, 0x70) {
+      multiplexer(WIRE_OBJECT, 0x70),
+      load_cell_success(false) {
 }
 
 EventHandler::~EventHandler(void) {}
@@ -39,8 +42,12 @@ void EventHandler::begin(void) {
     } */
 
     Serial.setDebugOutput(PRODUCTION);
-    configManager.attach(&mDNS);
-    configManager.load();  // load the config from flash
+
+    projectConfig.attach(configHandler);
+    projectConfig.registerUserConfig(&waterConfig);
+    projectConfig.attach(network);
+    projectConfig.attach(mDNS);
+    configHandler.begin();  // load the projectConfig from flash
     network.begin();
     mDNS.begin();
 
@@ -79,12 +86,16 @@ void EventHandler::begin(void) {
     waterLevelSensor.begin();
     log_d("[EventHandler]: Scanning multiplexer for Load Cell");
     multiplexer.selectPort(0);
+    load_cell_success = loadCell.begin();
     log_d("[EventHandler]: Initializing Load Cell %s",
-          loadCell.begin() ? "Success" : "Failed");
+          load_cell_success ? "Success" : "Failed");
 }
 
 void EventHandler::loop(void) {
-    //ota.handleOTAUpdate();
-    //data.loop();
-    //timedTasks.accumulateSensorData();
+    // ota.handleOTAUpdate();
+    // data.loop();
+    // timedTasks.accumulateSensorData();
+    if (load_cell_success) {
+        log_d("[EventHandler]: %0.3f", loadCell.readWeight());
+    }
 }

@@ -8,7 +8,8 @@ EventHandler eventHandler;
 const int led1 = 4;
 
 void setup() {
-    pinMode(led1, OUTPUT);
+    // pinMode(led1, OUTPUT);
+    pinMode(21, INPUT);
     eventHandler.begin();
 }
 

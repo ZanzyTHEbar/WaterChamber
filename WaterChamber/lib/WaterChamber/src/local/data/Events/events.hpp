@@ -18,6 +18,7 @@
 #endif  // USE_GOOGLE_SHEETS
 //* Data
 #include <local/data/AccumulateData/accumulatedata.hpp>
+#include <local/data/config/config.hpp>
 
 //* Sensors
 //* Temp local/io/Sensors
@@ -43,7 +44,11 @@ class EventHandler {
    private:
     //! Objects
 
-    ProjectConfig configManager;
+    ProjectConfig projectConfig;
+
+    ConfigHandler configHandler;
+
+    WaterConfig waterConfig;
 
     //* Network
     WiFiHandler network;
@@ -68,6 +73,8 @@ class EventHandler {
     TimedTasks timedTasks;
 
     I2C_Multiplexer multiplexer;
+
+    bool load_cell_success;
 
    public:
     EventHandler();
