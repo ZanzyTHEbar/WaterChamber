@@ -12,7 +12,6 @@ struct WaterConfig_t {
 }  // namespace Config
 
 class WaterConfig : public CustomConfigInterface {
-    Config::WaterConfig_t config;
     ProjectConfig& projectConfig;
 
    public:
@@ -22,4 +21,6 @@ class WaterConfig : public CustomConfigInterface {
 
     void save() override;
     void load() override;
+    
+    Config::WaterConfig_t config;
 };

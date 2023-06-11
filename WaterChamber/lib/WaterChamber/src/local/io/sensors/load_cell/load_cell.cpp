@@ -120,7 +120,6 @@ void LoadCell::peel() {
     uint8_t data = 0;
     writeReg(REG_CLICK_RST, &data, 1);
 }
-
 long LoadCell::average(uint8_t times) {
     long sum = 0;
     for (uint8_t i = 0; i < times; i++) {
@@ -129,7 +128,6 @@ long LoadCell::average(uint8_t times) {
 
     return sum / times;
 }
-
 float LoadCell::getCalibration() {
     uint8_t data[4];
     uint32_t value = 0;
@@ -146,11 +144,9 @@ float LoadCell::getCalibration() {
     //_calibration = *cal;
     return *cal;
 }
-
 void LoadCell::setCalibration(float value) {
     _calibration = value;
 }
-
 uint8_t LoadCell::peelFlag() {
     uint8_t data[1];
     readReg(REG_DATA_GET_PEEL_FLAG, data, 1);
@@ -164,7 +160,6 @@ uint8_t LoadCell::peelFlag() {
         return 0;
     }
 }
-
 long LoadCell::getValue() {
     uint8_t data[4];
     long value = 0;
@@ -209,7 +204,6 @@ int LoadCell::readReg(uint8_t reg, uint8_t* data, size_t size) {
 
     return 1;
 }
-
 uint8_t LoadCell::writeReg(uint8_t reg, const void* data, size_t size) {
     if (data == NULL) {
         log_v("[Load Cell]: pBuf ERROR!! : null pointer");

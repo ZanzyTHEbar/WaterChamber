@@ -92,10 +92,10 @@ void EventHandler::begin(void) {
 }
 
 void EventHandler::loop(void) {
-    // ota.handleOTAUpdate();
-    // data.loop();
-    // timedTasks.accumulateSensorData();
-    if (load_cell_success) {
-        log_d("[EventHandler]: %0.3f", loadCell.readWeight());
-    }
+    ota.handleOTAUpdate();
+    data.loop();
+    timedTasks.accumulateSensorData();
+    //if (load_cell_success) {
+    //    log_d("[EventHandler]: %0.3f", loadCell.readWeight());
+    //}
 }
